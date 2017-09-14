@@ -33,7 +33,8 @@ public class Main {
     static List<identificador> literales;
     static List<identificador> errores;
     public static void main(String[] args) throws IOException {
-        String path = "C:/Users/MaríaLaura/Documents/Scanner/analizador/src/analizador/Lexer.flex";
+        //String path = "C:/Users/MaríaLaura/Desktop/analizador_1/src/analizador/Lexer.flex";
+        String path = "C:/Users/Estuche/Dropbox/NetBeansProjects/Scanner/analizador/src/analizador/Lexer.flex";
         generarLexer(path);
         probarLexerFile();
 
@@ -55,8 +56,14 @@ public class Main {
         Reader reader = new BufferedReader(new FileReader("fichero.txt"));
         Lexer lexer = new Lexer (reader);
         String resultado="";
+        
         while (true){
             Token token =lexer.yylex();
+            
+            if (token == null)
+                break;
+            
+            System.out.println(token);
             /*
             if (token == null){
                 for(int i=0;i<tokenslist.size();i++){
@@ -84,13 +91,6 @@ public class Main {
                     resultado=resultado+ "< " + lexer.lexeme + "> ";
                     break;
                 }
-                case LlaveD: {
-                    tokenitem.nombre=lexer.lexeme;
-                    tokenitem.ID=linea;
-                    operadores.add(tokenitem);
-                    resultado=resultado+ "< " + lexer.lexeme + "> ";
-                    break;
-                }
                 case ParentesisI: {
                     tokenitem.nombre=lexer.lexeme;
                     tokenitem.ID=linea;
@@ -105,27 +105,6 @@ public class Main {
                     resultado=resultado+ "< " + lexer.lexeme + "> ";
                     break;
                 }
-                case ParentesisCI: {
-                    tokenitem.nombre=lexer.lexeme;
-                    tokenitem.ID=linea;
-                    operadores.add(tokenitem);
-                    resultado=resultado+ "< " + lexer.lexeme + "> ";
-                    break;
-                }
-                case ParentesisCD: {
-                    tokenitem.nombre=lexer.lexeme;
-                    tokenitem.ID=linea;
-                    operadores.add(tokenitem);
-                    resultado=resultado+ "< " + lexer.lexeme + "> ";
-                    break;
-                }
-                case Operador: {
-                    tokenitem.nombre=lexer.lexeme;
-                    tokenitem.ID=linea;
-                    operadores.add(tokenitem);
-                    resultado=resultado+ "< " + lexer.lexeme + "> ";
-                    break;
-                }
                 case PalabraReservada: {
                     tokenitem.nombre=lexer.lexeme;
                     tokenitem.ID=linea;
@@ -134,9 +113,10 @@ public class Main {
                     break;
                 }
                 case ID: {
+                    
                     tokenitem.nombre=lexer.lexeme;
                     tokenitem.ID=linea;
-                    literales.add(tokenitem);
+                    tokenslist.add(tokenitem);
                     resultado=resultado+ "<" + lexer.lexeme + linea+ "> ";
                     break;
                 }
@@ -151,6 +131,4 @@ public class Main {
             }
     }
  }
-
-
 }
