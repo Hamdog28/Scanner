@@ -9,7 +9,7 @@ package analizador;
  *
  * @author Carlos
  */
-public class identificador {
+public class Identificador {
     public String nombre;
     public int ID;
 }
