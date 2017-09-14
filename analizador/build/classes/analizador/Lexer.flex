@@ -32,6 +32,6 @@ public String lexeme;
 "}" {return LlaveD;}
 {PalabraReservada} {lexeme=yytext(); return PalabraReservada;}
 {Palabra} {lexeme=yytext(); return Identificador;}
-{SaltoDeLinea} {lexeme=yytext(); return SaltoDeLinea}
+{SaltoDeLinea} {lexeme=yytext(); return SaltoDeLinea;}
  {Numero} {lexeme=yytext(); return INT;}
 . {return ERROR;}

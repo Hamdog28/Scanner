@@ -33,10 +33,10 @@ public class Main {
     static List<identificador> literales;
     static List<identificador> errores;
     public static void main(String[] args) throws IOException {
-        String path = "C:/Users/MaríaLaura/Desktop/analizador_1/src/analizador/Lexer.flex";
+        //String path = "C:/Users/MaríaLaura/Desktop/analizador_1/src/analizador/Lexer.flex";
+        String path = "C:/Users/Estuche/Dropbox/NetBeansProjects/Scanner/analizador/src/analizador/Lexer.flex";
         generarLexer(path);
         probarLexerFile();
-        System.out.println("hola");
 
     }
     public static void generarLexer(String path){
@@ -56,8 +56,14 @@ public class Main {
         Reader reader = new BufferedReader(new FileReader("fichero.txt"));
         Lexer lexer = new Lexer (reader);
         String resultado="";
+        
         while (true){
             Token token =lexer.yylex();
+            
+            if (token == null)
+                break;
+            
+            System.out.println(token);
             /*
             if (token == null){
                 for(int i=0;i<tokenslist.size();i++){
@@ -125,6 +131,4 @@ public class Main {
             }
     }
  }
-
-
 }
