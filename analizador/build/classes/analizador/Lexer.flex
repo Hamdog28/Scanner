@@ -12,11 +12,11 @@ Numero = {Digito}{Digito}*
 Letra = [a-zA-Z_]
 Palabra = {Letra}({Letra}|{Digito})*
 Espacio = " "
-SaltoDeLinea = \n|\r|\r\n
+SaltoDeLinea = \r|\n|\r\n
 PalabraReservada = "auto"|"break"|"case"|"char"|"const"|"continue"|"default"|"do"|"double"|"else"|"enum"|"extern"|"float"|"for"|"goto"|"if"|"int"|"long"|"register"|"return"|"short"|"signed"|"sizeof"|"static"|"struct"|"switch"|"typedef"|"union"|"unsigned"|"void"|"volatile"|"while"
 Operadores = ","|"++"|"--"|"=="|">="|">"|"?"|"<="|"<"|"!="|"||"|"&&"|"!"|"="|"+"|"-"|"*"|"/"|"%"|":"|"."|"+="|"-="|"*="|"/="|"&"|"^"|"|"|">>"|"<<"|"~"|"%="|"&="|"^="|"|="|"<<="|">>="|"->"
-String = \"([^\\\"]|\\.|[^\r\n])*\"
-ComentarioLinea = "//"{Todo}{SaltoDeLinea}
+String = \"({Numero}|{Espacio}|{Palabra}|{Operadores}|\\)*\"
+ComentarioLinea = "//"({Numero}|{Espacio}|{Palabra}|{Operadores}|\\)*{SaltoDeLinea}
 ComentarioBloque = "/*"{Todo}"*/"
 /* Finaliza expresiones regulares */
 
@@ -24,11 +24,10 @@ ComentarioBloque = "/*"{Todo}"*/"
 public String lexeme;
 %}
 %%
-{ComentarioLinea} {/*Ignore*/}
-{ComentarioBloque} {/*Ignore*/}
+{ComentarioLinea} {lexeme=yytext(); return SaltoDeLinea;}
+{ComentarioBloque} {lexeme=yytext(); return Comentario;}
 {SaltoDeLinea} {lexeme=yytext(); return SaltoDeLinea;}
 {String} {lexeme=yytext(); return Literal;}
-
 {Operadores} {lexeme=yytext(); return Operador;}
 ";" {lexeme=yytext(); return PuntoComa;}
 "(" {lexeme=yytext(); return ParentesisI;}
@@ -38,10 +37,12 @@ public String lexeme;
 "{" {lexeme=yytext(); return LlaveI;}
 "}" {lexeme=yytext(); return LlaveD;}
 {PalabraReservada} {lexeme=yytext(); return PalabraReservada;}
+(\"{Palabra}|{Palabra}\") {lexeme=yytext(); return ERROR;}
+
 {Palabra} {lexeme=yytext(); return Identificador;}
 
 {Numero} {lexeme=yytext(); return Literal;}
 
 
 {Espacio} {/*Ignore*/}
-. {return ERROR;}
+. {lexeme=yytext(); return ERROR;}
