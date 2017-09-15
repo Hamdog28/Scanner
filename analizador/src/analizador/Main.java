@@ -28,13 +28,13 @@ public class Main {
      */
     static List<identificador> tokenslist;
     static List<identificador> operadores;
-    static List<identificador> identificadores;
+    static List<identificador> Identificadores;
     static List<identificador> palabrasReservadas;
     static List<identificador> literales;
     static List<identificador> errores;
     public static void main(String[] args) throws IOException {
-        String path = "C:/Users/MaríaLaura/Documents/Scanner/analizador/src/analizador/Lexer.flex";
-        //String path = "C:/Users/Estuche/Dropbox/NetBeansProjects/Scanner/analizador/src/analizador/Lexer.flex";
+        //String path = "C:/Users/MaríaLaura/Documents/Scanner/analizador/src/analizador/Lexer.flex";
+        String path = "C:/Users/Estuche/Dropbox/NetBeansProjects/Scanner/analizador/src/analizador/Lexer.flex";
         generarLexer(path);
         probarLexerFile();
 
@@ -47,7 +47,7 @@ public class Main {
         int linea=1;
         tokenslist = new LinkedList<identificador>();
         operadores = new LinkedList<identificador>();
-        identificadores = new LinkedList<identificador>();
+        Identificadores = new LinkedList<identificador>();
         palabrasReservadas = new LinkedList<identificador>();
         literales = new LinkedList<identificador>();
         errores = new LinkedList<identificador>();
@@ -137,7 +137,7 @@ public class Main {
                 case Identificador: {
                     tokenitem.nombre=lexer.lexeme;
                     tokenitem.ID=linea;
-                    identificadores.add(tokenitem);
+                    Identificadores.add(tokenitem);
                     resultado=resultado+ "< " + lexer.lexeme + "> ";
                     break;
                 }
@@ -187,9 +187,9 @@ public class Main {
             for(int i=0;i<literales.size();i++){
                 System.out.println(literales.get(i).nombre + "=" + literales.get(i).ID);
             }
-            System.out.println("identificadores");
-            for(int i=0;i<identificadores.size();i++){
-                System.out.println(identificadores.get(i).nombre + "=" + identificadores.get(i).ID);
+            System.out.println("Identificadores");
+            for(int i=0;i<Identificadores.size();i++){
+                System.out.println(Identificadores.get(i).nombre + "=" + Identificadores.get(i).ID);
             }
             
             
