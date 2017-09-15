@@ -1,4 +1,4 @@
-int main (int argc,char **argv){
+int int int int int main (int argc,char **argv){
 	printf("Hola mundo\n"); //comentario
 	return 0;
 /*esto es un comentario
