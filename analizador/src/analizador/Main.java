@@ -94,6 +94,7 @@ public class Main {
                 case LlaveI: {
                     tokenitem.nombre=lexer.lexeme;
                     tokenitem.ID=linea;
+                    System.out.println("ML"+linea);
                     operadores.add(tokenitem);
                     break;
                 }
@@ -106,12 +107,14 @@ public class Main {
                 case ParentesisI: {
                     tokenitem.nombre=lexer.lexeme;
                     tokenitem.ID=linea;
+                    
                     operadores.add(tokenitem);
                     break;
                 }
                 case ParentesisD: {
                     tokenitem.nombre=lexer.lexeme;
                     tokenitem.ID=linea;
+                    
                     operadores.add(tokenitem);
                     break;
                 }

@@ -26,8 +26,10 @@ public String lexeme;
 %%
 {ComentarioLinea} {lexeme=yytext(); return SaltoDeLinea;}
 {ComentarioBloque} {lexeme=yytext(); return Comentario;}
+
 {SaltoDeLinea} {lexeme=yytext(); return SaltoDeLinea;}
 {String} {lexeme=yytext(); return Literal;}
+
 {Operadores} {lexeme=yytext(); return Operador;}
 ";" {lexeme=yytext(); return PuntoComa;}
 "(" {lexeme=yytext(); return ParentesisI;}

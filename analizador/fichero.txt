@@ -1,11 +1,6 @@
-int main (int argc,char **argv)
-{
-   /*holaaa*/
-	printf("Hola 
-mundo\n");
-   //comentario
+int main (int argc,char **argv){
+	printf("Hola mundo\n"); //comentario
 	return 0;
-
 /*esto es un comentario
 de 
 bloque*/
