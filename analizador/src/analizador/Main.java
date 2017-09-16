@@ -15,7 +15,7 @@ public class Main {
     
     //Listas para tokens y errores
     static List<Identificador> tokenslist;
-    static List<String> tokenserror;
+    static List<Identificador> tokenserror;
 
     public static void main(String[] args) throws IOException {
         //String path = "C:/Users/MaríaLaura/Documents/Scanner/analizador/src/analizador/Lexer.flex";
@@ -70,7 +70,7 @@ public class Main {
                 }
                 case ERROR: {
                     tokenitem.tipo = "Error";
-                    tokenserror.add(tokenitem.nombre);
+                    tokenserror.add(tokenitem);
                     break;
                 }
                 case LlaveI: {
@@ -182,7 +182,7 @@ public class Main {
         System.out.println("ERRORES");
         
         for (int i = 0; i < tokenserror.size(); i++) {
-            System.out.println("Token desconocido: " + tokenserror.get(i));
+            System.out.println("Token desconocido en la linea " + tokenserror.get(i).linea + ": " + tokenserror.get(i).nombre);
         }
         
     }
