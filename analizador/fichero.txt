@@ -1,5 +1,7 @@
 int int int int int main (int argc,char **argv){
 	printf("Hola mundo\n"); //comentario
+	float var5;
+	float 5var;
 	return 0;
 /*esto es un comentario
 de 

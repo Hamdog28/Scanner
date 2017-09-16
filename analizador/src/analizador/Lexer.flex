@@ -13,8 +13,10 @@ Letra = [a-zA-Z_]
 Palabra = {Letra}({Letra}|{Digito})*
 Espacio = " "
 SaltoDeLinea = \r|\n|\r\n
+
 PalabraReservada = "auto"|"break"|"case"|"char"|"const"|"continue"|"default"|"do"|"double"|"else"|"enum"|"extern"|"float"|"for"|"goto"|"if"|"int"|"long"|"register"|"return"|"short"|"signed"|"sizeof"|"static"|"struct"|"switch"|"typedef"|"union"|"unsigned"|"void"|"volatile"|"while"
 Operadores = ","|"++"|"--"|"=="|">="|">"|"?"|"<="|"<"|"!="|"||"|"&&"|"!"|"="|"+"|"-"|"*"|"/"|"%"|":"|"."|"+="|"-="|"*="|"/="|"&"|"^"|"|"|">>"|"<<"|"~"|"%="|"&="|"^="|"|="|"<<="|">>="|"->"
+
 String = \"({Numero}|{Espacio}|{Palabra}|{Operadores}|\\)*\"
 ComentarioLinea = "//"({Numero}|{Espacio}|{Palabra}|{Operadores}|\\)*{SaltoDeLinea}
 ComentarioBloque = "/*"{Todo}"*/"
@@ -24,6 +26,7 @@ ComentarioBloque = "/*"{Todo}"*/"
 public String lexeme;
 %}
 %%
+
 {ComentarioLinea} {lexeme=yytext(); return SaltoDeLinea;}
 {ComentarioBloque} {lexeme=yytext(); return Comentario;}
 
@@ -41,7 +44,7 @@ public String lexeme;
 {PalabraReservada} {lexeme=yytext(); return PalabraReservada;}
 (\"{Palabra}|{Palabra}\") {lexeme=yytext(); return ERROR;}
 
-{Palabra} {lexeme=yytext(); return Identificador;}
+{Numero}* {Palabra} {lexeme=yytext(); return Identificador;}
 
 {Numero} {lexeme=yytext(); return Literal;}
 
