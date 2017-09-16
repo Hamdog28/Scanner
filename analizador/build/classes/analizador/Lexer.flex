@@ -7,7 +7,9 @@ import static analizador.Token.*;
 /* Inicio de Expresiones regulares */
 Todo = ([^\\\"]|\\.)*
 Digito = [0-9]
-Numero = {Digito}{Digito}*
+Octal = [0-7]
+Hexadecimal = [a-fA-F0-9]
+Numero = {Digito}{Digito}*|0"x"{Hexadecimal}|0{Octal}
 
 Letra = [a-zA-Z_]
 Palabra = {Letra}({Letra}|{Digito})*
@@ -26,7 +28,6 @@ ComentarioBloque = "/*"{Todo}"*/"
 public String lexeme;
 %}
 %%
-
 {ComentarioLinea} {lexeme=yytext(); return SaltoDeLinea;}
 {ComentarioBloque} {lexeme=yytext(); return Comentario;}
 
@@ -44,10 +45,10 @@ public String lexeme;
 {PalabraReservada} {lexeme=yytext(); return PalabraReservada;}
 (\"{Palabra}|{Palabra}\") {lexeme=yytext(); return ERROR;}
 
-{Numero}* {Palabra} {lexeme=yytext(); return Identificador;}
-
+{Palabra} {lexeme=yytext(); return Identificador;}
+{Numero}{Palabra} {lexeme=yytext(); return ERROR;}
 {Numero} {lexeme=yytext(); return Literal;}
 
 
-{Espacio} {/*Ignore*/}
+({Espacio}|[ \t\v\f])* {/*Ignore*/}
 . {lexeme=yytext(); return ERROR;}

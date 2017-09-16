@@ -18,15 +18,15 @@ public class Main {
     static List<Identificador> tokenserror;
 
     public static void main(String[] args) throws IOException {
-        //String path = "C:/Users/MaríaLaura/Documents/Scanner/analizador/src/analizador/Lexer.flex";
+        String path = "C:/Users/MaríaLaura/Documents/Scanner/analizador/src/analizador/Lexer.flex";
         //String path = "C:/Users/Estuche/Dropbox/NetBeansProjects/Scanner/analizador/src/analizador/Lexer.flex";
-        //generarLexer(path);
+        generarLexer(path);
         scanLexerFile();
         imprimirTokens();
         imprimirErrores();
     }
 
-    //Esta función será BORRRRADAA!!!
+    //Actualiza el Lexer.java
     public static void generarLexer(String path) {
         File file = new File(path);
         jflex.Main.generate(file);
@@ -59,9 +59,9 @@ public class Main {
             //Se decide el tipo de token
             switch (token) {
                 case Comentario: {
-                    //resultado = lexer.lexeme;
-                    //String[] lines = resultado.split("\r\n|\r|\n");
-                    //linea += (lines.length) - 1;
+                    String resultado = lexer.lexeme;
+                    String[] lines = resultado.split("\r\n|\r|\n");
+                    linea += (lines.length) - 1;
                     break;
                 }
                 case SaltoDeLinea: {
@@ -69,8 +69,11 @@ public class Main {
                     break;
                 }
                 case ERROR: {
+                    String resultado= lexer.lexeme;
+                    int aux=resultado.charAt(0);
                     tokenitem.tipo = "Error";
                     tokenserror.add(tokenitem);
+                    System.out.println("estoo" + aux + "abc");
                     break;
                 }
                 case LlaveI: {

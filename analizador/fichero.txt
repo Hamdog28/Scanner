@@ -2,7 +2,8 @@ int int int int int main (int argc,char **argv){
 	printf("Hola mundo\n"); //comentario
 	float var5;
 	float 5var;
-	return 0;
+	return -2;
+	var5=2-3
 /*esto es un comentario
 de 
 bloque*/
