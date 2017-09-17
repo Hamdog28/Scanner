@@ -1,0 +1,155 @@
+//Palabras reservadas
+auto,break,case,char,const,continue,default,do,double,else,enum,extern,float, for,goto,if,int,long,register,return,short,signed,sizeof,static,struct,switch, typedef,union,unsigned,void,volatile,while
+
+//Palabras reservadas
+auto
+break
+case
+char
+const
+continue
+default
+do
+double
+else
+enum
+extern
+float
+for
+goto
+if
+int
+long
+register
+return
+shorts
+signed
+sizeof
+static
+struct
+switch
+typedef
+union
+unsigned
+void
+volatile
+while
+
+//Palabras reservadas con espacios
+    auto
+    break
+    case
+    char
+    const
+    continue
+    default
+    do
+    double
+    else
+    enum
+    extern
+    float
+    for
+    goto
+    if
+    int
+    long
+    register
+    return
+    shorts
+    signed
+    sizeof
+    static
+    struct
+    switch
+    typedef
+    union
+    unsigned
+    void
+    volatile
+    while
+
+//Numeros
+123
+123.123
+123e-5
+123e5
+0x123123123
+0xABCF123123
+0123123
+0123
+0123.3
+0xABF.ABF
+
+//variables
+arbol
+banano_verde
+    pepino0
+
+//String
+"Bonjour\n"
+"Hola \t"
+"Namaste \"
+"Arajo"
+"Ciao"
+"How are
+you"
+"Comment allez" "vouz?"
+
+//Operadores
+,
+;
+++
+--
+==
+>=
+>
+?
+<=
+<
+!=
+||
+&&
+!
+=
++
+-
+*
+/
+%
+(
+)
+[
+]
+{
+}
+:
+.
++=
+-=
+*=
+/=
+&
+^
+|
+>>
+<<
+~
+%=
+&=
+^=
+|=
+<<=
+>>=
+
+//Operadores como identifiadores
+"," ";" "++" "--" "==" ">=" ">" "?" "<=" "<" "!=" "||" "&&" "!" "=" "+" "-" "*" "/" "%" "(" ")" "[" "]" "{" "}" ":" "." "+=" "-=" "*=" "/=" "&" "^" "|" ">>" "<<" "~" "%=" "&=" "^=" "|=" "<<=" ">>=" "->"
+
+//Mas pruebas
+"asdf" "asdf" "asdf" "asdf" "asdf"
+
+//Funciones
+asdf(estructura variable1, )
+estructura asdf(,)
+funcion2000("IDK")
+"IWY" funcion3000()

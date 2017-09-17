@@ -18,8 +18,8 @@ public class Main {
     static List<Identificador> tokenserror;
 
     public static void main(String[] args) throws IOException {
-        String path = "C:/Users/MaríaLaura/Documents/Scanner/analizador/src/analizador/Lexer.flex";
-        //String path = "C:/Users/Estuche/Dropbox/NetBeansProjects/Scanner/analizador/src/analizador/Lexer.flex";
+        //String path = "C:/Users/MaríaLaura/Documents/Scanner/analizador/src/analizador/Lexer.flex";
+        String path = "C:/Users/Estuche/Dropbox/NetBeansProjects/Scanner/analizador/src/analizador/Lexer.flex";
         generarLexer(path);
         scanLexerFile();
         imprimirTokens();
@@ -38,7 +38,14 @@ public class Main {
         tokenserror = new LinkedList<>();
 
         //Abrir el archivo
-        Reader reader = new BufferedReader(new FileReader("fichero.txt"));
+        //String file = "test\\ArbolesRecursion.txt";
+        //String file = "test\\DisplayOwnSource.txt";
+        //String file = "test\\HolaMundo.txt";
+        //String file = "test\\SinSaltoDeLinea.txt";
+        //String file = "test\\SumaMatriz.txt";
+        String file = "test\\Tokens.txt";
+        
+        Reader reader = new BufferedReader(new FileReader(file));
         Lexer lexer = new Lexer(reader);
         //String resultado = "";
 
@@ -147,6 +154,7 @@ public class Main {
 
     }
 
+    //Función que imprime los tokens, su categoria y línea
     static void imprimirTokens() {
 
         int ultimaLinea;
@@ -159,34 +167,40 @@ public class Main {
             repeticiones = 1;
 
             for (int j = i + 1; j < tokenslist.size(); j++) {
-
-                if (tokenslist.get(i).nombre.equals(tokenslist.get(j).nombre) && ultimaLinea == tokenslist.get(j).linea) {
-                    repeticiones++;
-                    tokenslist.remove(j);
-                    j--;
-                } else if (ultimaLinea != tokenslist.get(j).linea && repeticiones > 1) {
+                
+                if ((tokenslist.get(i).nombre.equals(tokenslist.get(j).nombre)
+                        && ultimaLinea != tokenslist.get(j).linea || (j + 1) == tokenslist.size())
+                        && repeticiones > 1) {
                     System.out.print("(" + repeticiones + ")");
-                    repeticiones = 0;
-                    ultimaLinea = tokenslist.get(j).linea;
+                }
+                
+                if (tokenslist.get(i).nombre.equals(tokenslist.get(j).nombre) && ultimaLinea == tokenslist.get(j).linea) {
+                    tokenslist.remove(j);
+                    repeticiones++;
                     j--;
                 } else if (tokenslist.get(i).nombre.equals(tokenslist.get(j).nombre) && ultimaLinea != tokenslist.get(j).linea) {
                     System.out.print(", " + tokenslist.get(j).linea);
+                    ultimaLinea = tokenslist.get(j).linea;
                     tokenslist.remove(j);
+                    repeticiones = 1;
                     j--;
                 }
+                
             }
 
             System.out.println();
         }
     }
     
+    //Función que imprime los errores lexicos
     static void imprimirErrores() {
         
         System.out.println("ERRORES");
         
+        if (tokenserror.isEmpty()) {System.out.println("Ningún error ha sido hayado");}
+        
         for (int i = 0; i < tokenserror.size(); i++) {
             System.out.println("Token desconocido en la linea " + tokenserror.get(i).linea + ": " + tokenserror.get(i).nombre);
         }
-        
     }
 }
