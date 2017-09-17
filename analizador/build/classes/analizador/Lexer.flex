@@ -10,7 +10,7 @@ Digito = [0-9]
 Octal = [0-7]
 Hexadecimal = [a-fA-F0-9]
 Num = {Digito}{Digito}*
-Numero = ({Num}|(0"x"{Hexadecimal}{Hexadecimal}*)|(0{Octal}{Octal}*)|({Digito}*"."{Num})|({Digito}*"."{Num}("e"|"E"){Num})|({Digito}*"."{Num}"-"("e"|"E"){Num})|({Num}("e"|"E"){Digito}*)|({Num}"-"("e"|"E"){Num}))
+Numero = ({Num}|(0{Octal}{Octal}*)|({Digito}*"."{Num}))
 
 Letra = [a-zA-Z_]
 Palabra = {Letra}({Letra}|{Digito})*
@@ -44,12 +44,13 @@ public String lexeme;
 "{" {lexeme=yytext(); return LlaveI;}
 "}" {lexeme=yytext(); return LlaveD;}
 {PalabraReservada} {lexeme=yytext(); return PalabraReservada;}
-(\"{Palabra}|{Palabra}\") {lexeme=yytext(); return ERROR;}
+(\"({Palabra}|{Espacio})*{SaltoDeLinea}|{Palabra}\") {lexeme=yytext(); return ERROR;}
 
 {Palabra} {lexeme=yytext(); return Identificador;}
+(0"x"{Hexadecimal}{Hexadecimal}*)|({Digito}*"."{Num}("e"|"E"){Num})|({Digito}*"."{Num}"-"("e"|"E"){Num})|({Num}("e"|"E"){Digito}*)|({Num}"-"("e"|"E"){Num}) {lexeme=yytext(); return Literal;}
 {Numero}{Palabra} {lexeme=yytext(); return ERROR;}
 {Numero} {lexeme=yytext(); return Literal;}
 
 
-({Espacio}|[ \t\v\f])* {/*Ignore*/}
+({Espacio}|[ \t\f])* {/*Ignore*/}
 . {lexeme=yytext(); return ERROR;}
