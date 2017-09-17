@@ -9,7 +9,8 @@ Todo = ([^\\\"]|\\.)*
 Digito = [0-9]
 Octal = [0-7]
 Hexadecimal = [a-fA-F0-9]
-Numero = {Digito}{Digito}*|0"x"{Hexadecimal}|0{Octal}
+Num = {Digito}{Digito}*
+Numero = ({Num}|(0"x"{Hexadecimal}{Hexadecimal}*)|(0{Octal}{Octal}*)|({Digito}*"."{Num})|({Digito}*"."{Num}("e"|"E"){Num})|({Digito}*"."{Num}"-"("e"|"E"){Num})|({Num}("e"|"E"){Digito}*)|({Num}"-"("e"|"E"){Num}))
 
 Letra = [a-zA-Z_]
 Palabra = {Letra}({Letra}|{Digito})*
