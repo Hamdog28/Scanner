@@ -40,9 +40,9 @@ public class Main {
         //Abrir el archivo
         //String file = "test\\ArbolesRecursion.txt";
         //String file = "test\\DisplayOwnSource.txt";
-        String file = "test\\HolaMundo.txt";
+        //String file = "test\\HolaMundo.txt";
         //String file = "test\\SinSaltoDeLinea.txt";
-        //String file = "test\\SumaMatriz.txt";
+        String file = "test\\SumaMatriz.txt";
         //String file = "test\\Tokens.txt";
         
         Reader reader = new BufferedReader(new FileReader(file));
