@@ -40,8 +40,8 @@ public class Main {
         //Abrir el archivo
         //String file = "test\\ArbolesRecursion.txt";
         //String file = "test\\DisplayOwnSource.txt";
-        //String file = "test\\HolaMundo.txt";
-        String file = "test\\SinSaltoDeLinea.txt";
+        String file = "test\\HolaMundo.txt";
+        //String file = "test\\SinSaltoDeLinea.txt";
         //String file = "test\\SumaMatriz.txt";
         //String file = "test\\Tokens.txt";
         
@@ -119,10 +119,6 @@ public class Main {
                     break;
                 }
                 case Identificador: {
-                    //resultado = lexer.lexeme;
-                    //if (resultado.substring(resultado.length() - 1) == " ") {
-                    //    resultado = resultado.replace(resultado.substring(resultado.length() - 1), "");
-                    //}
                     tokenitem.tipo = "Identificador";
                     tokenslist.add(tokenitem);
                     break;
@@ -147,7 +143,6 @@ public class Main {
                     tokenslist.add(tokenitem);
                     break;
                 default:
-                    //resultado = resultado + "<" + lexer.lexeme + "> ";
             }
 
         }
@@ -197,7 +192,7 @@ public class Main {
         
         System.out.println("ERRORES");
         
-        if (tokenserror.isEmpty()) {System.out.println("Ningún error ha sido hayado");}
+        if (tokenserror.isEmpty()) {System.out.println("Ningún error ha sido hallado");}
         
         for (int i = 0; i < tokenserror.size(); i++) {
             System.out.println("Token desconocido en la linea " + tokenserror.get(i).linea + ": " + tokenserror.get(i).nombre);
