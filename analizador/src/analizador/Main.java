@@ -18,8 +18,8 @@ public class Main {
     static List<Identificador> tokenserror;
 
     public static void main(String[] args) throws IOException {
-        String path = "C:/Users/MaríaLaura/Documents/Scanner/analizador/src/analizador/Lexer.flex";
-       // String path = "C:/Users/Estuche/Dropbox/NetBeansProjects/Scanner/analizador/src/analizador/Lexer.flex";
+        //String path = "C:/Users/MaríaLaura/Documents/Scanner/analizador/src/analizador/Lexer.flex";
+         String path = "C:/Users/Estuche/Dropbox/NetBeansProjects/Scanner/analizador/src/analizador/Lexer.flex";
         generarLexer(path);
         scanLexerFile();
         imprimirTokens();
@@ -42,9 +42,15 @@ public class Main {
         //String file = "test\\DisplayOwnSource.txt";
         //String file = "test\\HolaMundo.txt";
         //String file = "test\\SinSaltoDeLinea.txt";
-        String file = "test\\SumaMatriz.txt";
+        //String file = "test\\SumaMatriz.txt";
         //String file = "test\\Tokens.txt";
         
+        String file = "test\\Revisiones\\integral.c";
+        
+        /*
+        asdfasdf
+        */
+        String _a;
         Reader reader = new BufferedReader(new FileReader(file));
         Lexer lexer = new Lexer(reader);
         //String resultado = "";
@@ -71,16 +77,18 @@ public class Main {
                     linea += (lines.length) - 1;
                     break;
                 }
+                
                 case SaltoDeLinea: {
                     linea++;
                     break;
                 }
                 case ERROR: {
                     String resultado= lexer.lexeme;
+                    if (resultado.contains("\n"))
+                        linea++;
                     int aux=resultado.charAt(0);
                     tokenitem.tipo = "Error";
                     tokenserror.add(tokenitem);
-                    System.out.println("estoo" + aux + "abc");
                     break;
                 }
                 case LlaveI: {

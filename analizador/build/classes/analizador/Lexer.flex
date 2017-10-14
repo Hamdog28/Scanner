@@ -20,9 +20,12 @@ SaltoDeLinea = \r|\n|\r\n
 PalabraReservada = "auto"|"break"|"case"|"char"|"const"|"continue"|"default"|"do"|"double"|"else"|"enum"|"extern"|"float"|"for"|"goto"|"if"|"int"|"long"|"register"|"return"|"short"|"signed"|"sizeof"|"static"|"struct"|"switch"|"typedef"|"union"|"unsigned"|"void"|"volatile"|"while"
 Operadores = ","|"++"|"--"|"=="|">="|">"|"?"|"<="|"<"|"!="|"||"|"&&"|"!"|"="|"+"|"-"|"*"|"/"|"%"|":"|"."|"+="|"-="|"*="|"/="|"&"|"^"|"|"|">>"|"<<"|"~"|"%="|"&="|"^="|"|="|"<<="|">>="|"->"
 
-String = \"({Numero}|{Espacio}|{Palabra}|{Operadores}|\\)*\"
-ComentarioLinea = "//"({Numero}|{Espacio}|{Palabra}|{Operadores}|\\)*{SaltoDeLinea}
+String = ({Numero}|{Espacio}|{Palabra}|{Operadores}|\\|[^\r\n\"\\])* 
+
+ComentarioLinea = "//"({Numero}|{Espacio}|{Palabra}|{Operadores}|\\|[^\r\n\"\\])*{SaltoDeLinea}
 ComentarioBloque = "/*"{Todo}"*/"
+
+SKIPME = [\x21-\x29\x2B-\x40\x5B-\x5E\x60\x7B-\xFF]
 /* Finaliza expresiones regulares */
 
 %{
@@ -33,8 +36,13 @@ public String lexeme;
 {ComentarioBloque} {lexeme=yytext(); return Comentario;}
 
 {SaltoDeLinea} {lexeme=yytext(); return SaltoDeLinea;}
-{String} {lexeme=yytext(); return Literal;}
 
+\"{String}\" {lexeme=yytext(); return Literal;}
+\"{String} {lexeme=yytext(); return ERROR;}
+
+\'.\' {lexeme=yytext(); return Literal;}
+\'. {lexeme=yytext(); return ERROR;}
+\'.+\' {lexeme=yytext(); return ERROR;}
 {Operadores} {lexeme=yytext(); return Operador;}
 ";" {lexeme=yytext(); return PuntoComa;}
 "(" {lexeme=yytext(); return ParentesisI;}
@@ -49,8 +57,12 @@ public String lexeme;
 {Palabra} {lexeme=yytext(); return Identificador;}
 (0"x"{Hexadecimal}{Hexadecimal}*)|({Digito}*"."{Num}("e"|"E"){Num})|({Digito}*"."{Num}"-"("e"|"E"){Num})|({Num}("e"|"E"){Digito}*)|({Num}"-"("e"|"E"){Num}) {lexeme=yytext(); return Literal;}
 {Numero}{Palabra} {lexeme=yytext(); return ERROR;}
+
 {Numero} {lexeme=yytext(); return Literal;}
 
 
 ({Espacio}|[ \t\f])* {/*Ignore*/}
+
+/* ESTO ES PARA EL ARBOL CON TILDE :)
+({SKIPME}|[^\\\"\r|\n|\r\n ])({SKIPME}|{Palabra}|"*")*{Palabra} {lexeme=yytext(); return ERROR;}*/
 . {lexeme=yytext(); return ERROR;}
