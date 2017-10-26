@@ -12,7 +12,7 @@ int main()
   char *x = "ljhgsdkjaghsdf ;   //Comillas sin cerrar
   char y = '\b ';
   char z = '\b ;
-  char ML = '';
+  char ML = '\b';
   
   //  Comentarios
 
@@ -28,7 +28,7 @@ int main()
 
       \@         //error 
   Á // error
-  int árbol;  // error
+  int láóérbol;  // error
   º // error
   
   /*  comentario de bloque sin cerrar

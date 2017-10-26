@@ -18,8 +18,8 @@ public class Main {
     static List<Identificador> tokenserror;
 
     public static void main(String[] args) throws IOException {
-        //String path = "C:/Users/MaríaLaura/Documents/Scanner/analizador/src/analizador/Lexer.flex";
-         String path = "C:/Users/Estuche/Dropbox/NetBeansProjects/Scanner/analizador/src/analizador/Lexer.flex";
+        String path = "C:/Users/MaríaLaura/Documents/Scanner/analizador/src/analizador/Lexer.flex";
+         //String path = "C:/Users/Estuche/Dropbox/NetBeansProjects/Scanner/analizador/src/analizador/Lexer.flex";
         generarLexer(path);
         scanLexerFile();
         imprimirTokens();
@@ -45,12 +45,13 @@ public class Main {
         //String file = "test\\SumaMatriz.txt";
         //String file = "test\\Tokens.txt";
         
-        String file = "test\\Revisiones\\integral.c";
+        String file = "test\\Revisiones\\varios.c";
         
         /*
         asdfasdf
         */
-        String _a;
+        char _a;
+        _a='\b';
         Reader reader = new BufferedReader(new FileReader(file));
         Lexer lexer = new Lexer(reader);
         //String resultado = "";
