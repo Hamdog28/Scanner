@@ -39,11 +39,87 @@ parser code
     }
 :}
 
+action code
+{:
+:}
+
 /* Declaración de terminales */
-terminal coma;
+terminal    smbauto,
+            smbbreak,
+            smbcase,
+            smbchar,
+            smbconst,
+            smbcontinue,
+            smbdefault,
+            smbdo,
+            smbdouble,
+            smbelse,
+            smbenum,
+            smbextern,
+            smbfloat,
+            smbfor,
+            smbgoto,
+            smbif,
+            smbint,
+            smblong,
+            smbregister,
+            smbreturn,
+            smbshort,
+            smbsigned,
+            smbsizeof,
+            smbstatic,
+            smbstruct,
+            smbswitch,
+            smbtypedef,
+            smbunion,
+            smbunsigned,
+            smbvoid,
+            smbvolatile,
+            smbwhile;
+
+terminal    smbcoma,
+            smbmasmas,
+            smbmenosmenos,
+            smbigualigual,
+            smbmayorigual,
+            smbmayor,
+            smbpregunta,
+            smbmenorigual,
+            smbmenor,
+            smbdiferente,
+            smbor,
+            smband,
+            smbadmiracion,
+            smbigual,
+            smbmas,
+            smbmenos,
+            smbmultiplicacion,
+            smbdivision,
+            smbdivisionentera,
+            smbdospuntos,
+            smbpunto,
+            smbmasigual,
+            smbmenosigual,
+            smbmultiplicacionigual,
+            smbdivisionigual,
+            smbamperson,
+            smbcircunflejo,
+            smbpipe,
+            smbfeclasderecha,
+            smbflechasizquierda,
+            smbrabocerdo,
+            smbporcentajeigual,
+            smbampersonigual,
+            smbcircunflejoigual,
+            smbfeclasderechaigual,
+            smbflechasizquierdaigual,
+            smbflecha;
+
+terminal    smbread,
+            smbwrite;
 
 /* Declaracíon de no terminales */
-non terminal INICIO;
+non terminal INICIO, VARIABLESGLOB, FUNCIONES, TIPOVARIABLE, TIPOFUNCION;
 
 /* Precedencia de mayor y menos */
 
@@ -51,4 +127,10 @@ non terminal INICIO;
 start with INICIO;
 
 /* Reglas semánticas */
-INICIO ::= coma;
+INICIO ::= VARIABLESGLOB FUNCIONES;
+
+VARIABLESGLOB ::= TIPOVARIABLE;
+
+TIPOVARIABLE ::= smbchar | smbint | smblong | smbshort;
+
+TIPOFUNCION ::= smbchar | smbint | smblong | smbshort | smbvoid;

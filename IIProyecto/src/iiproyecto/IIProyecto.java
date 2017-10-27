@@ -1,5 +1,6 @@
 package iiproyecto;
 
+import java.io.BufferedReader;
 import static java.nio.file.StandardCopyOption.REPLACE_EXISTING;
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -86,10 +87,10 @@ public class IIProyecto {
     
     public static void analizarArchivo() {
         
-        String filePath = "test\\integral.txt";
+        String filePath = "test\\testFile.txt";
         
         try {
-            Lexer lexer = new Lexer(new FileReader(filePath));
+            Lexer lexer = new Lexer(new BufferedReader(new FileReader(filePath)));
             Parser parser = new Parser(lexer);
             
             parser.parse();
@@ -99,7 +100,7 @@ public class IIProyecto {
         } catch (Exception ex) {
             Logger.getLogger(IIProyecto.class.getName()).log(Level.SEVERE, null, ex);
         }
-                
+        
     }
     
 }
