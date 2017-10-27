@@ -5,8 +5,7 @@ import java_cup.runtime.*;
 %%
 
 /* Nombre de la clase */
-%class Scanner
-
+%class Lexer
 /* Leer archivos de texto */
 %unicode
 
