@@ -1,0 +1,54 @@
+package iiproyecto;
+
+import java_cup.runtime.*;
+
+
+/* Condigos para el parser */
+parser code
+{:
+    public String resultado="";
+
+    //Metodo al que se llama automaticamente ante algun error sintactico
+    public void syntax_error(Symbol s)
+    {
+        String lexema = s.value.toString();
+        int fila = s.right;
+        int columna = s.left;
+        
+        System.out.println("Error la linea " + fila + ", columna " + columna);
+        System.out.println("\t\tLexema: " + lexema);
+        System.out.println("\t\tFila: " + fila);
+        System.out.println("\t\tColumna: " + columna);
+
+        //Agregar a una lista de errores
+    }
+
+    //Metodo al que se llama en el momento en que ya no es posible una recuperacion de errores
+    public void unrecovered_syntax_error(Symbol s) throws java.lang.Exception
+    {
+        String lexema = s.value.toString();
+        int fila = s.right;
+        int columna = s.left;
+        
+        System.out.println("!!!!!!! Error Sintactico, Panic Mode !!!!!!! ");
+        System.out.println("\t\tLexema: " + lexema);
+        System.out.println("\t\tFila: " + fila);
+        System.out.println("\t\tColumna: " + columna);
+
+        //Agregar a una lista de errores
+    }
+:}
+
+/* Declaración de terminales */
+terminal coma;
+
+/* Declaracíon de no terminales */
+non terminal INICIO;
+
+/* Precedencia de mayor y menos */
+
+/* Regla inicial */
+start with INICIO;
+
+/* Reglas semánticas */
+INICIO ::= coma;
