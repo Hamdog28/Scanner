@@ -88,14 +88,14 @@ public class IIProyecto {
     public static void analizarArchivo() {
                 
         String filePath = "test\\testFile.txt";
-        
+                
         try {
             Lexer lexer = new Lexer(new BufferedReader(new FileReader(filePath)));
             Parser parser = new Parser(lexer);
             
             parser.parse();
             
-            System.out.println("Parseo finalizado con codigo " + parser.EOF_sym());
+            System.out.println("Parseo finalizado");
             
         } catch (FileNotFoundException ex) {
             System.out.println(ex.toString());

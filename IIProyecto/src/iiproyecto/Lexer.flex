@@ -40,6 +40,7 @@ import java_cup.runtime.*;
 
 /* Definición de variables */
 Ident = [a-zA-Z$_] [a-zA-Z0-9$_]*
+Blancos = [\t\n\r ]+	//El espacio al final es necesario
 
 /* Definición de estados */
 %state STRING
@@ -48,6 +49,8 @@ Ident = [a-zA-Z$_] [a-zA-Z0-9$_]*
 %%
 
 <YYINITIAL> {
+
+	{Blancos}		{ /* No haga nada */ }
 
 	/* Sección de palabras reservadas */
 	"break"			{ return simbolo("break", Simbolos.smbbreak, yytext()); }
@@ -105,11 +108,16 @@ Ident = [a-zA-Z$_] [a-zA-Z0-9$_]*
 	"{"				{ return simbolo("{", Simbolos.smbllaveabrir, yytext()); }
 	"}"				{ return simbolo("}", Simbolos.smbllavecerrar, yytext()); }
 
+	/* Simbolo para iniciar en un comentario de bloque */
+	"/*"[[^*]|*]*"*/"	{ /* No haga nada */ System.out.println("Lexer: C de Bloque: " + yytext()); }
+
+	/* Simbolo para iniciar en un comentario de linea */
+	"//".*			{ /* No haga nada */ System.out.println("Lexer: C de Linea: " + yytext()); }
+
 	/* Simbolo para iniciar en STRING */
 	\"				{ string.setLength(0); yybegin(STRING); }
 
-	/* Simbolo para iniciar en un comentario de bloque */
-	\/\*			{ yybegin(COMMENT); }
+	/* Este comentario no hace nada, pero no se borra " */
 
 }
 
@@ -124,10 +132,5 @@ Ident = [a-zA-Z$_] [a-zA-Z0-9$_]*
 
 }
 
-<COMMENT> {
-	\*\/			{ yybegin(YYINITIAL); }
-	[^\*]+			{ /* No haga nada */ System.out.println(yytext()); }
-}
-
-/* error fallback */
-[^]|\n 				{ System.out.println("Error at line " + yyline + ", column " + yycolumn + " : Illegal character <"+ yytext()+">"); }
+/* Error si no encuentra cohincidencias */
+[^]|\n 				{ System.out.println("Error lexico en la linea " + yyline + ", columna " + yycolumn + " : Caracter ilegal <"+ yytext()+">"); }

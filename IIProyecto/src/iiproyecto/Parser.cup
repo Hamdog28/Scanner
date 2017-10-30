@@ -2,12 +2,9 @@ package iiproyecto;
 
 import java_cup.runtime.*;
 
-
-/* Condigos para el parser */
+/* Condigo personalizado para el parser */
 parser code
 {:
-    //public String resultado="";
-
     //Metodo al que se llama automaticamente ante algun error sintactico
     public void syntax_error(Symbol s)
     {
@@ -15,9 +12,7 @@ parser code
         int fila = s.right;
         int columna = s.left;
         
-        System.out.println("Error con el token <" + lexema + "> en la fila " + fila + ", columna " + columna);
-
-        //Agregar a una lista de errores
+        System.out.println("Error sintactico en la fila " + fila + ", columna " + columna + ": Token inesperado <" + lexema + ">");
     }
 
     //Metodo al que se llama en el momento en que ya no es posible una recuperacion de errores
@@ -28,25 +23,12 @@ parser code
         int columna = s.left;
         
         System.out.println("¡No se pudo recuperar!");
-        System.out.println("Terror con el token <" + lexema + "> en la fila " + fila + ", columna " + columna);
-
-        /*
-        System.out.println("!!!!!!! Error Sintactico, Panic Mode !!!!!!! ");
-        System.out.println("\t\tLexema: " + lexema);
-        System.out.println("\t\tFila: " + fila);
-        System.out.println("\t\tColumna: " + columna);
-        */
-
-        //Agregar a una lista de errores
+        System.out.println("Terror sintactico en la fila " + fila + ", columna " + columna + ": Token inesperado <" + lexema + ">");
     }
 :}
 
-action code
-{:
-:}
-
 /* Declaración de terminales */
-terminal    smbbreak,
+terminal String    smbbreak,
             smbcase,
             smbchar,
             smbconst,
@@ -64,10 +46,10 @@ terminal    smbbreak,
             smbvoid,
             smbwhile;
 
-terminal    smbread,
+terminal String    smbread,
             smbwrite;
 
-terminal    smbigualigual,
+terminal String    smbigualigual,
             smbmayorigual,
             smbmayor,
             smbmenorigual,
@@ -89,7 +71,7 @@ terminal    smbigualigual,
             smbmultiplicacionigual,
             smbdivisionigual;
 
-terminal    smbcoma,
+terminal String    smbcoma,
             smbpuntocoma,
             smbparentabrir,
             smbparentcerrar,
@@ -98,10 +80,12 @@ terminal    smbcoma,
             smbllaveabrir,
             smbllavecerrar;
 
-terminal    smbstring;
+terminal String smbstring;
 
 /* Declaracíon de no terminales */
-non terminal INICIO;
+non terminal String INICIO, TIPOVAR, TIPOFUNC;
+
+non terminal String PRUEBA;
 
 /* Precedencia de mayor y menos */
 
@@ -109,4 +93,17 @@ non terminal INICIO;
 start with INICIO;
 
 /* Reglas semánticas */
-INICIO ::= smbint:e {: System.out.println(e); :};
+INICIO ::= PRUEBA;
+
+TIPOVAR ::= smbchar:e {: System.out.println("Parser: " + e); :}
+            | smbint:e {: System.out.println("Parser: " + e); :}
+            | smblong:e {: System.out.println("Parser: " + e); :}
+            | smbshort:e {: System.out.println("Parser: " + e); :};
+
+TIPOFUNC ::= smbvoid:e {: System.out.println("Parser: " + e); :}
+            | smbchar:e {: System.out.println("Parser: " + e); :}
+            | smbint:e {: System.out.println("Parser: " + e); :}
+            | smblong:e {: System.out.println("Parser: " + e); :}
+            | smbshort:e {: System.out.println("Parser: " + e); :};
+
+PRUEBA ::= smbint:e {: System.out.println("Parser: " + e); :};
