@@ -64,7 +64,7 @@ public class IIProyecto {
     public static void compilarJFlexYCup() {
         String[] scannerFile = {"src\\iiproyecto\\Lexer.flex"};
         String[] parserFile = {"-parser", "Parser", "-symbols", "Simbolos", "src\\iiproyecto\\Parser.cup"};
-        
+                
         try {
             jflex.Main.generate(scannerFile);
             java_cup.Main.main(parserFile);
@@ -86,7 +86,7 @@ public class IIProyecto {
     }
     
     public static void analizarArchivo() {
-        
+                
         String filePath = "test\\testFile.txt";
         
         try {
@@ -94,10 +94,14 @@ public class IIProyecto {
             Parser parser = new Parser(lexer);
             
             parser.parse();
+            
+            System.out.println("Parseo finalizado con codigo " + parser.EOF_sym());
+            
         } catch (FileNotFoundException ex) {
             System.out.println(ex.toString());
             Logger.getLogger(IIProyecto.class.getName()).log(Level.SEVERE, null, ex);
         } catch (Exception ex) {
+            System.out.println(ex.toString());
             Logger.getLogger(IIProyecto.class.getName()).log(Level.SEVERE, null, ex);
         }
         

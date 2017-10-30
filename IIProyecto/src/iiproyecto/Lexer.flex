@@ -6,6 +6,7 @@ import java_cup.runtime.*;
 
 /* Nombre de la clase */
 %class Lexer
+
 /* Leer archivos de texto */
 %unicode
 
@@ -18,96 +19,115 @@ import java_cup.runtime.*;
 %line
 %column
 
-/* */
+/* Ni idea */
 %full
 %ignorecase
 
 /* Código personalizado */
 %{
+	StringBuffer string = new StringBuffer();
 
+	private Symbol simbolo(String texto, int tipo, Object valor) {
+		System.out.println("Lexer: " + texto);
+		return new Symbol(tipo, yycolumn, yyline, valor);
+	}
 %}
 
+/* Simbolo de End Of File */
 %eofval{
   return new Symbol(Simbolos.EOF, yycolumn, yyline, yytext());
 %eofval}
 
 /* Definición de variables */
+Ident = [a-zA-Z$_] [a-zA-Z0-9$_]*
+
+/* Definición de estados */
+%state STRING
+%state COMMENT
 
 %%
 
-/* Sección de palabras reservadas */
-"auto"			{ return new Symbol(Simbolos.smbauto, yycolumn, yyline, yytext()); }
-"break"			{ return new Symbol(Simbolos.smbbreak, yycolumn, yyline, yytext()); }
-"case"			{ return new Symbol(Simbolos.smbcase, yycolumn, yyline, yytext()); }
-"char"			{ return new Symbol(Simbolos.smbchar, yycolumn, yyline, yytext()); }
-"const"			{ return new Symbol(Simbolos.smbconst, yycolumn, yyline, yytext()); }
-"continue"		{ return new Symbol(Simbolos.smbcontinue, yycolumn, yyline, yytext()); }
-"default"		{ return new Symbol(Simbolos.smbdefault, yycolumn, yyline, yytext()); }
-"do"			{ return new Symbol(Simbolos.smbdo, yycolumn, yyline, yytext()); }
-"double"		{ return new Symbol(Simbolos.smbdouble, yycolumn, yyline, yytext()); }
-"else"			{ return new Symbol(Simbolos.smbelse, yycolumn, yyline, yytext()); }
-"enum"			{ return new Symbol(Simbolos.smbenum, yycolumn, yyline, yytext()); }
-"extern"		{ return new Symbol(Simbolos.smbextern, yycolumn, yyline, yytext()); }
-"float"			{ return new Symbol(Simbolos.smbfloat, yycolumn, yyline, yytext()); }
-"for"			{ return new Symbol(Simbolos.smbfor, yycolumn, yyline, yytext()); }
-"goto"			{ return new Symbol(Simbolos.smbgoto, yycolumn, yyline, yytext()); }
-"if"			{ return new Symbol(Simbolos.smbif, yycolumn, yyline, yytext()); }
-"int"			{ return new Symbol(Simbolos.smbint, yycolumn, yyline, yytext()); }
-"long"			{ return new Symbol(Simbolos.smblong, yycolumn, yyline, yytext()); }
-"register"		{ return new Symbol(Simbolos.smbregister, yycolumn, yyline, yytext()); }
-"return"		{ return new Symbol(Simbolos.smbreturn, yycolumn, yyline, yytext()); }
-"short"			{ return new Symbol(Simbolos.smbshort, yycolumn, yyline, yytext()); }
-"signed"		{ return new Symbol(Simbolos.smbsigned, yycolumn, yyline, yytext()); }
-"sizeof"		{ return new Symbol(Simbolos.smbsizeof, yycolumn, yyline, yytext()); }
-"static"		{ return new Symbol(Simbolos.smbstatic, yycolumn, yyline, yytext()); }
-"struct"		{ return new Symbol(Simbolos.smbstruct, yycolumn, yyline, yytext()); }
-"switch"		{ return new Symbol(Simbolos.smbswitch, yycolumn, yyline, yytext()); }
-"typedef"		{ return new Symbol(Simbolos.smbtypedef, yycolumn, yyline, yytext()); }
-"union"			{ return new Symbol(Simbolos.smbunion, yycolumn, yyline, yytext()); }
-"unsigned"		{ return new Symbol(Simbolos.smbunsigned, yycolumn, yyline, yytext()); }
-"void"			{ return new Symbol(Simbolos.smbvoid, yycolumn, yyline, yytext()); }
-"volatile"		{ return new Symbol(Simbolos.smbvolatile, yycolumn, yyline, yytext()); }
-"while"			{ return new Symbol(Simbolos.smbwhile, yycolumn, yyline, yytext()); }
+<YYINITIAL> {
 
-/* Identificadores revervados */
-"read"			{ return new Symbol(Simbolos.smbread, yycolumn, yyline, yytext()); }
-"write"			{ return new Symbol(Simbolos.smbwrite, yycolumn, yyline, yytext()); }
+	/* Sección de palabras reservadas */
+	"break"			{ return simbolo("break", Simbolos.smbbreak, yytext()); }
+	"case"			{ return simbolo("case", Simbolos.smbcase, yytext()); }
+	"char"			{ return simbolo("char", Simbolos.smbchar, yytext()); }
+	"const"			{ return simbolo("const", Simbolos.smbconst, yytext()); }
+	"continue"		{ return simbolo("continue", Simbolos.smbcontinue, yytext()); }
+	"default"		{ return simbolo("default", Simbolos.smbdefault, yytext()); }
+	"do"			{ return simbolo("do", Simbolos.smbdo, yytext()); }
+	"else"			{ return simbolo("else", Simbolos.smbelse, yytext()); }
+	"for"			{ return simbolo("for", Simbolos.smbfor, yytext()); }
+	"if"			{ return simbolo("if", Simbolos.smbif, yytext()); }
+	"int"			{ return simbolo("int", Simbolos.smbint, yytext()); }
+	"long"			{ return simbolo("long", Simbolos.smblong, yytext()); }
+	"return"		{ return simbolo("return", Simbolos.smbreturn, yytext()); }
+	"short"			{ return simbolo("short", Simbolos.smbshort, yytext()); }
+	"switch"		{ return simbolo("switch", Simbolos.smbswitch, yytext()); }
+	"void"			{ return simbolo("void", Simbolos.smbvoid, yytext()); }
+	"while"			{ return simbolo("while", Simbolos.smbwhile, yytext()); }
 
-/* Simbolos y operadores */
-","				{ return new Symbol(Simbolos.smbcoma, yycolumn, yyline, yytext()); }
-"++"			{ return new Symbol(Simbolos.smbmasmas, yycolumn, yyline, yytext()); }
-"--"			{ return new Symbol(Simbolos.smbmenosmenos, yycolumn, yyline, yytext()); }
-"=="			{ return new Symbol(Simbolos.smbigualigual, yycolumn, yyline, yytext()); }
-">="			{ return new Symbol(Simbolos.smbmayorigual, yycolumn, yyline, yytext()); }
-">"				{ return new Symbol(Simbolos.smbmayor, yycolumn, yyline, yytext()); }
-"?"				{ return new Symbol(Simbolos.smbpregunta, yycolumn, yyline, yytext()); }
-"<="			{ return new Symbol(Simbolos.smbmenorigual, yycolumn, yyline, yytext()); }
-"<"				{ return new Symbol(Simbolos.smbmenor, yycolumn, yyline, yytext()); }
-"!="			{ return new Symbol(Simbolos.smbdiferente, yycolumn, yyline, yytext()); }
-"||"			{ return new Symbol(Simbolos.smbor, yycolumn, yyline, yytext()); }
-"&&"			{ return new Symbol(Simbolos.smband, yycolumn, yyline, yytext()); }
-"!"				{ return new Symbol(Simbolos.smbadmiracion, yycolumn, yyline, yytext()); }
-"="				{ return new Symbol(Simbolos.smbigual, yycolumn, yyline, yytext()); }
-"+"				{ return new Symbol(Simbolos.smbmas, yycolumn, yyline, yytext()); }
-"-"				{ return new Symbol(Simbolos.smbmenos, yycolumn, yyline, yytext()); }
-"*"				{ return new Symbol(Simbolos.smbmultiplicacion, yycolumn, yyline, yytext()); }
-"/"				{ return new Symbol(Simbolos.smbdivision, yycolumn, yyline, yytext()); }
-"%"				{ return new Symbol(Simbolos.smbdivisionentera, yycolumn, yyline, yytext()); }
-":"				{ return new Symbol(Simbolos.smbdospuntos, yycolumn, yyline, yytext()); }
-"."				{ return new Symbol(Simbolos.smbpunto, yycolumn, yyline, yytext()); }
-"+="			{ return new Symbol(Simbolos.smbmasigual, yycolumn, yyline, yytext()); }
-"-="			{ return new Symbol(Simbolos.smbmenosigual, yycolumn, yyline, yytext()); }
-"*="			{ return new Symbol(Simbolos.smbmultiplicacionigual, yycolumn, yyline, yytext()); }
-"/="			{ return new Symbol(Simbolos.smbdivisionigual, yycolumn, yyline, yytext()); }
-"&"				{ return new Symbol(Simbolos.smbamperson, yycolumn, yyline, yytext()); }
-"^"				{ return new Symbol(Simbolos.smbcircunflejo, yycolumn, yyline, yytext()); }
-"|"				{ return new Symbol(Simbolos.smbpipe, yycolumn, yyline, yytext()); }
-">>"			{ return new Symbol(Simbolos.smbfeclasderecha, yycolumn, yyline, yytext()); }
-"<<"			{ return new Symbol(Simbolos.smbflechasizquierda, yycolumn, yyline, yytext()); }
-"~"				{ return new Symbol(Simbolos.smbrabocerdo, yycolumn, yyline, yytext()); }
-"%="			{ return new Symbol(Simbolos.smbporcentajeigual, yycolumn, yyline, yytext()); }
-"&="			{ return new Symbol(Simbolos.smbampersonigual, yycolumn, yyline, yytext()); }
-"^="			{ return new Symbol(Simbolos.smbcircunflejoigual, yycolumn, yyline, yytext()); }
-"<<="			{ return new Symbol(Simbolos.smbfeclasderechaigual, yycolumn, yyline, yytext()); }
-">>="			{ return new Symbol(Simbolos.smbflechasizquierdaigual, yycolumn, yyline, yytext()); }
-"->"			{ return new Symbol(Simbolos.smbflecha, yycolumn, yyline, yytext()); }
+	/* Identificadores revervados */
+	"read"			{ return simbolo("read", Simbolos.smbread, yytext()); }
+	"write"			{ return simbolo("write", Simbolos.smbwrite, yytext()); }
+
+	/* Aritmético y booleanos */
+	"=="			{ return simbolo("==", Simbolos.smbigualigual, yytext()); }
+	">="			{ return simbolo(">=", Simbolos.smbmayorigual, yytext()); }
+	">"				{ return simbolo(">", Simbolos.smbmayor, yytext()); }
+	"<="			{ return simbolo("<=", Simbolos.smbmenorigual, yytext()); }
+	"<"				{ return simbolo("<", Simbolos.smbmenor, yytext()); }
+	"!="			{ return simbolo("!=", Simbolos.smbdiferente, yytext()); }
+	"||"			{ return simbolo("||", Simbolos.smbor, yytext()); }
+	"&&"			{ return simbolo("&&", Simbolos.smband, yytext()); }
+	"!"				{ return simbolo("!", Simbolos.smbadmiracion, yytext()); }
+	"++"			{ return simbolo("++", Simbolos.smbmasmas, yytext()); }
+	"--"			{ return simbolo("--", Simbolos.smbmenosmenos, yytext()); }
+	"="				{ return simbolo("=", Simbolos.smbigual, yytext()); }
+	"+"				{ return simbolo("+", Simbolos.smbmas, yytext()); }
+	"-"				{ return simbolo("-", Simbolos.smbmenos, yytext()); }
+	"*"				{ return simbolo("*", Simbolos.smbmultiplicacion, yytext()); }
+	"/"				{ return simbolo("/", Simbolos.smbdivision, yytext()); }
+	"%"				{ return simbolo("%", Simbolos.smbdivisionentera, yytext()); }
+	"+="			{ return simbolo("+=", Simbolos.smbmasigual, yytext()); }
+	"-="			{ return simbolo("-=", Simbolos.smbmenosigual, yytext()); }
+	"*="			{ return simbolo("*=", Simbolos.smbmultiplicacionigual, yytext()); }
+	"/="			{ return simbolo("/=", Simbolos.smbdivisionigual, yytext()); }
+
+	/* Simbolos especiales */
+	","				{ return simbolo(",", Simbolos.smbcoma, yytext()); }
+	";"				{ return simbolo(";", Simbolos.smbpuntocoma, yytext()); }
+	"("				{ return simbolo("(", Simbolos.smbparentabrir, yytext()); }
+	")"				{ return simbolo(")", Simbolos.smbparentcerrar, yytext()); }
+	"["				{ return simbolo("[", Simbolos.smbcuadradoabrir, yytext()); }
+	"]"				{ return simbolo("]", Simbolos.smbcuadradocerrar, yytext()); }
+	"{"				{ return simbolo("{", Simbolos.smbllaveabrir, yytext()); }
+	"}"				{ return simbolo("}", Simbolos.smbllavecerrar, yytext()); }
+
+	/* Simbolo para iniciar en STRING */
+	\"				{ string.setLength(0); yybegin(STRING); }
+
+	/* Simbolo para iniciar en un comentario de bloque */
+	\/\*			{ yybegin(COMMENT); }
+
+}
+
+<STRING> {
+	\"				{ yybegin(YYINITIAL); return simbolo("STRING: " + string.toString(), Simbolos.smbstring, string.toString()); }
+	[^\n\r\"\\]+	{ string.append( yytext() ); }
+	\\t 			{ string.append('\t'); }
+	\\n 			{ string.append('\n'); }
+	\\r 			{ string.append('\r'); }
+	\\\" 			{ string.append('\"'); }
+	\\\\			{ string.append('\\'); }
+
+}
+
+<COMMENT> {
+	\*\/			{ yybegin(YYINITIAL); }
+	[^\*]+			{ /* No haga nada */ System.out.println(yytext()); }
+}
+
+/* error fallback */
+[^]|\n 				{ System.out.println("Error at line " + yyline + ", column " + yycolumn + " : Illegal character <"+ yytext()+">"); }

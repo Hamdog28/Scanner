@@ -6,7 +6,7 @@ import java_cup.runtime.*;
 /* Condigos para el parser */
 parser code
 {:
-    public String resultado="";
+    //public String resultado="";
 
     //Metodo al que se llama automaticamente ante algun error sintactico
     public void syntax_error(Symbol s)
@@ -15,10 +15,7 @@ parser code
         int fila = s.right;
         int columna = s.left;
         
-        System.out.println("Error la linea " + fila + ", columna " + columna);
-        System.out.println("\t\tLexema: " + lexema);
-        System.out.println("\t\tFila: " + fila);
-        System.out.println("\t\tColumna: " + columna);
+        System.out.println("Error con el token <" + lexema + "> en la fila " + fila + ", columna " + columna);
 
         //Agregar a una lista de errores
     }
@@ -30,10 +27,15 @@ parser code
         int fila = s.right;
         int columna = s.left;
         
+        System.out.println("¡No se pudo recuperar!");
+        System.out.println("Terror con el token <" + lexema + "> en la fila " + fila + ", columna " + columna);
+
+        /*
         System.out.println("!!!!!!! Error Sintactico, Panic Mode !!!!!!! ");
         System.out.println("\t\tLexema: " + lexema);
         System.out.println("\t\tFila: " + fila);
         System.out.println("\t\tColumna: " + columna);
+        */
 
         //Agregar a una lista de errores
     }
@@ -44,82 +46,62 @@ action code
 :}
 
 /* Declaración de terminales */
-terminal    smbauto,
-            smbbreak,
+terminal    smbbreak,
             smbcase,
             smbchar,
             smbconst,
             smbcontinue,
             smbdefault,
             smbdo,
-            smbdouble,
             smbelse,
-            smbenum,
-            smbextern,
-            smbfloat,
             smbfor,
-            smbgoto,
             smbif,
             smbint,
             smblong,
-            smbregister,
             smbreturn,
             smbshort,
-            smbsigned,
-            smbsizeof,
-            smbstatic,
-            smbstruct,
             smbswitch,
-            smbtypedef,
-            smbunion,
-            smbunsigned,
             smbvoid,
-            smbvolatile,
             smbwhile;
 
-terminal    smbcoma,
-            smbmasmas,
-            smbmenosmenos,
-            smbigualigual,
+terminal    smbread,
+            smbwrite;
+
+terminal    smbigualigual,
             smbmayorigual,
             smbmayor,
-            smbpregunta,
             smbmenorigual,
             smbmenor,
             smbdiferente,
             smbor,
             smband,
             smbadmiracion,
+            smbmasmas,
+            smbmenosmenos,
             smbigual,
             smbmas,
             smbmenos,
             smbmultiplicacion,
             smbdivision,
             smbdivisionentera,
-            smbdospuntos,
-            smbpunto,
             smbmasigual,
             smbmenosigual,
             smbmultiplicacionigual,
-            smbdivisionigual,
-            smbamperson,
-            smbcircunflejo,
-            smbpipe,
-            smbfeclasderecha,
-            smbflechasizquierda,
-            smbrabocerdo,
-            smbporcentajeigual,
-            smbampersonigual,
-            smbcircunflejoigual,
-            smbfeclasderechaigual,
-            smbflechasizquierdaigual,
-            smbflecha;
+            smbdivisionigual;
 
-terminal    smbread,
-            smbwrite;
+terminal    smbcoma,
+            smbpuntocoma,
+            smbparentabrir,
+            smbparentcerrar,
+            smbcuadradoabrir,
+            smbcuadradocerrar,
+            smbllaveabrir,
+            smbllavecerrar;
+
+terminal    smbstring;
 
 /* Declaracíon de no terminales */
-non terminal INICIO, VARIABLESGLOB, FUNCIONES, TIPOVARIABLE, TIPOFUNCION;
+non terminal INICIO;
 
 /* Precedencia de mayor y menos */
 
@@ -127,10 +109,4 @@ non terminal INICIO, VARIABLESGLOB, FUNCIONES, TIPOVARIABLE, TIPOFUNCION;
 start with INICIO;
 
 /* Reglas semánticas */
-INICIO ::= VARIABLESGLOB FUNCIONES;
-
-VARIABLESGLOB ::= TIPOVARIABLE;
-
-TIPOVARIABLE ::= smbchar | smbint | smblong | smbshort;
-
-TIPOFUNCION ::= smbchar | smbint | smblong | smbshort | smbvoid;
+INICIO ::= smbint:e {: System.out.println(e); :};
