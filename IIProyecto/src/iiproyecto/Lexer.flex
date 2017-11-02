@@ -39,12 +39,29 @@ import java_cup.runtime.*;
 %eofval}
 
 /* Definición de variables */
-Ident = [a-zA-Z$_] [a-zA-Z0-9$_]*
+Ident = [:jletter:][:jletterdigit:]*
 Blancos = [\t\n\r ]+	//El espacio al final es necesario
 
+/* literales enteras */
+DecIntegerLiteral = 0 | [1-9][0-9]*
+DecLongLiteral    = {DecIntegerLiteral} [lL]
+
+HexIntegerLiteral = 0 [xX] 0* {HexDigit} {1,8}
+HexLongLiteral    = 0 [xX] 0* {HexDigit} {1,16} [lL]
+HexDigit          = [0-9a-fA-F]
+
+OctIntegerLiteral = 0+ [1-3]? {OctDigit} {1,15}
+OctLongLiteral    = 0+ 1? {OctDigit} {1,21} [lL]
+OctDigit          = [0-7]
+    
+Numero = {DecIntegerLiteral}|{DecLongLiteral}
+Octal = {OctIntegerLiteral}|{OctLongLiteral}|{OctDigit}
+Hexadecimal = {HexIntegerLiteral}|{HexLongLiteral}|{HexDigit}
+
+NOASCII = [\x80-\xFF]
+
 /* Definición de estados */
-%state STRING
-%state COMMENT
+%state STRING, CHARLITERAL
 
 %%
 
@@ -108,6 +125,11 @@ Blancos = [\t\n\r ]+	//El espacio al final es necesario
 	"{"				{ return simbolo("{", Simbolos.smbllaveabrir, yytext()); }
 	"}"				{ return simbolo("}", Simbolos.smbllavecerrar, yytext()); }
 
+        {Numero}{Ident} {System.out.println("Error lexico en la linea " + yyline + ", columna " + yycolumn + " : Caracter ilegal <"+ yytext()+">");}
+        {Numero}            { return simbolo("INT: " + yytext(), Simbolos.smbint, yytext()); }
+        {Octal}             { return simbolo("OCTAL: " + yytext(), Simbolos.smboct, yytext()); }
+        {Hexadecimal}       { return simbolo("HEXADECIAMAL: " + yytext(), Simbolos.smbhexa, yytext()); }
+        
 	/* Simbolo para iniciar en un comentario de bloque */
 	"/*"[[^*]|*]*"*/"	{ /* No haga nada */ System.out.println("Lexer: C de Bloque: " + yytext()); }
 
@@ -116,21 +138,39 @@ Blancos = [\t\n\r ]+	//El espacio al final es necesario
 
 	/* Simbolo para iniciar en STRING */
 	\"				{ string.setLength(0); yybegin(STRING); }
+        /* Este comentario no hace nada, pero no se borra " */
 
-	/* Este comentario no hace nada, pero no se borra " */
+        /* Simbolo para iniciar en CHARLITERAL */
+        \'                             { yybegin(CHARLITERAL); }
 
+        /* identifiers */ 
+        (({Ident}{NOASCII}+|{NOASCII}+{Ident}){Ident}*)+ {System.out.println("Error lexico en la linea " + yyline + ", columna " + yycolumn + " : Caracter ilegal <"+ yytext()+">");} /*Se vuela las tildes*/
+        {Ident}                   { return simbolo("IDENTIFICADOR: " + yytext(), Simbolos.smbidentificador, yytext()); }  
+	
+          
 }
 
 <STRING> {
-	\"				{ yybegin(YYINITIAL); return simbolo("STRING: " + string.toString(), Simbolos.smbstring, string.toString()); }
+	\"		{ yybegin(YYINITIAL); return simbolo("STRING: " + string.toString(), Simbolos.smbstring, string.toString()); }
 	[^\n\r\"\\]+	{ string.append( yytext() ); }
 	\\t 			{ string.append('\t'); }
 	\\n 			{ string.append('\n'); }
 	\\r 			{ string.append('\r'); }
 	\\\" 			{ string.append('\"'); }
 	\\\\			{ string.append('\\'); }
-
 }
 
-/* Error si no encuentra cohincidencias */
+<CHARLITERAL> { 
+    [^\r\n\'\\]\'          { yybegin(YYINITIAL); return simbolo("CHAR: " + yytext().charAt(0), Simbolos.smbchar, String.valueOf(yytext().charAt(0))); }
+    "\\b"\'                { yybegin(YYINITIAL); return simbolo("CHAR: " + "\b", Simbolos.smbchar, "\b"); }
+    "\\t"\'                { yybegin(YYINITIAL); return simbolo("CHAR: " + "\t", Simbolos.smbchar, "\t"); }
+    "\\n"\'                { yybegin(YYINITIAL); return simbolo("CHAR: " + "\n", Simbolos.smbchar, "\n"); }
+    "\\f"\'                { yybegin(YYINITIAL); return simbolo("CHAR: " + "\f", Simbolos.smbchar, "\f"); }
+    "\\r"\'                { yybegin(YYINITIAL); return simbolo("CHAR: " + "\r", Simbolos.smbchar, "\r"); }
+    "\\\""\'               { yybegin(YYINITIAL); return simbolo("CHAR: " + "\"", Simbolos.smbchar, "\""); }
+    "\\'"\'                { yybegin(YYINITIAL); return simbolo("CHAR: " + "\'", Simbolos.smbchar, "\'"); }
+    "\\\\"\'               { yybegin(YYINITIAL); return simbolo("CHAR: " + "\\", Simbolos.smbchar, "\\"); }
+}
+
+/* Error si no encuentra coincidencias */
 [^]|\n 				{ System.out.println("Error lexico en la linea " + yyline + ", columna " + yycolumn + " : Caracter ilegal <"+ yytext()+">"); }

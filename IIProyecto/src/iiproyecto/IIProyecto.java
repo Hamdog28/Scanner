@@ -86,7 +86,7 @@ public class IIProyecto {
     }
     
     public static void analizarArchivo() {
-                
+     
         String filePath = "test\\testFile.txt";
                 
         try {

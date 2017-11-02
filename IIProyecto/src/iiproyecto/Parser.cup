@@ -80,7 +80,7 @@ terminal String    smbcoma,
             smbllaveabrir,
             smbllavecerrar;
 
-terminal String smbstring;
+terminal String smbstring, smbidentificador,smbhex,smboct;
 
 /* Declaracíon de no terminales */
 non terminal String INICIO, TIPOVAR, TIPOFUNC;
@@ -106,4 +106,4 @@ TIPOFUNC ::= smbvoid:e {: System.out.println("Parser: " + e); :}
             | smblong:e {: System.out.println("Parser: " + e); :}
             | smbshort:e {: System.out.println("Parser: " + e); :};
 
-PRUEBA ::= smbint:e {: System.out.println("Parser: " + e); :};
+PRUEBA ::= smbidentificador:e {: System.out.println("Parser: " + e); :};

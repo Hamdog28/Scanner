@@ -9,7 +9,7 @@ Todo = ([^\\\"]|\\.)*
 Digito = [0-9]
 Octal = [0-7]
 Hexadecimal = [a-fA-F0-9]
-Num = [1-9]{Digito}*
+Num = [1-9]{Digito}* | 0
 Numero = ({Num}|(0{Octal}{Octal}*)|({Digito}*"."{Num}))
 
 Letra = [a-zA-Z_]
@@ -18,7 +18,7 @@ Espacio = " "
 SaltoDeLinea = \r|\n|\r\n
 
 
-Quote= \'
+
 SingleCharacter = [^\r\n\'\\]
 
 PalabraReservada = "auto"|"break"|"case"|"char"|"const"|"continue"|"default"|"do"|"double"|"else"|"enum"|"extern"|"float"|"for"|"goto"|"if"|"int"|"long"|"register"|"return"|"short"|"signed"|"sizeof"|"static"|"struct"|"switch"|"typedef"|"union"|"unsigned"|"void"|"volatile"|"while"
@@ -47,25 +47,25 @@ public String lexeme;
 \"{String}\" {lexeme=yytext(); return Literal;}
 \"{String} {lexeme=yytext(); return ERROR;}
 
-{Quote}{SingleCharacter}\' {lexeme=yytext(); return Literal;}
-{Quote}"\\b"\'                        {lexeme=yytext(); return Literal;}
-{Quote}"\\t"\'                        {lexeme=yytext(); return Literal;}
-{Quote}"\\n"\'                        {lexeme=yytext(); return Literal;}
-{Quote}"\\f"\'                        {lexeme=yytext(); return Literal;}
-{Quote}"\\r"\'                        {lexeme=yytext(); return Literal;}
-{Quote}"\\\""\'                       {lexeme=yytext(); return Literal;}
-{Quote}"\\'"\'                        {lexeme=yytext(); return Literal;}
-{Quote}"\\\\"\'                       {lexeme=yytext(); return Literal;}
+\'{SingleCharacter}\' {lexeme=yytext(); return Literal;}
+\'"\\b"\'                        {lexeme=yytext(); return Literal;}
+\'"\\t"\'                        {lexeme=yytext(); return Literal;}
+\'"\\n"\'                        {lexeme=yytext(); return Literal;}
+\'"\\f"\'                        {lexeme=yytext(); return Literal;}
+\'"\\r"\'                        {lexeme=yytext(); return Literal;}
+\'"\\\""\'                       {lexeme=yytext(); return Literal;}
+\'"\\'"\'                        {lexeme=yytext(); return Literal;}
+\'"\\\\"\'                       {lexeme=yytext(); return Literal;}
 
 
-{Quote}"\\b"                        {lexeme=yytext(); return ERROR;}
-{Quote}"\\t"                        {lexeme=yytext(); return ERROR;}
-{Quote}"\\n"                        {lexeme=yytext(); return ERROR;}
-{Quote}"\\f"                        {lexeme=yytext(); return ERROR;}
-{Quote}"\\r"                        {lexeme=yytext(); return ERROR;}
-{Quote}"\\\""                       {lexeme=yytext(); return ERROR;}
-{Quote}"\\'"\                       {lexeme=yytext(); return ERROR;}
-{Quote}"\\\\"                       {lexeme=yytext(); return ERROR;}
+\'"\\b"                        {lexeme=yytext(); return ERROR;}
+\'"\\t"                        {lexeme=yytext(); return ERROR;}
+\'"\\n"                        {lexeme=yytext(); return ERROR;}
+\'"\\f"                        {lexeme=yytext(); return ERROR;}
+\'"\\r"                        {lexeme=yytext(); return ERROR;}
+\'"\\\""                       {lexeme=yytext(); return ERROR;}
+\'"\\'"\                       {lexeme=yytext(); return ERROR;}
+\'"\\\\"                       {lexeme=yytext(); return ERROR;}
 \'. {lexeme=yytext(); return ERROR;}
 \'.+\' {lexeme=yytext(); return ERROR;}
 
