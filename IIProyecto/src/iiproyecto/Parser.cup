@@ -27,8 +27,15 @@ parser code
     }
 :}
 
+action code
+{:
+    private void print(String msg) {
+        System.out.println("Parser: " + msg);
+    }
+:}
+
 /* Declaración de terminales */
-terminal String    smbbreak,
+terminal String smbbreak,
             smbcase,
             smbchar,
             smbconst,
@@ -46,10 +53,10 @@ terminal String    smbbreak,
             smbvoid,
             smbwhile;
 
-terminal String    smbread,
+terminal String smbread,
             smbwrite;
 
-terminal String    smbigualigual,
+terminal String smbigualigual,
             smbmayorigual,
             smbmayor,
             smbmenorigual,
@@ -71,8 +78,9 @@ terminal String    smbigualigual,
             smbmultiplicacionigual,
             smbdivisionigual;
 
-terminal String    smbcoma,
+terminal String smbcoma,
             smbpuntocoma,
+            smbdospuntos,
             smbparentabrir,
             smbparentcerrar,
             smbcuadradoabrir,
@@ -80,30 +88,243 @@ terminal String    smbcoma,
             smbllaveabrir,
             smbllavecerrar;
 
-terminal String smbstring, smbidentificador,smbhex,smboct;
+terminal String smbstring,
+            smbidentificador,
+            smbcharlit,
+            smbdec,
+            smbhex,
+            smboct;
 
 /* Declaracíon de no terminales */
-non terminal String INICIO, TIPOVAR, TIPOFUNC;
+nonterminal String INICIO, VAROFUNC, VAROFUNC1, VAROFUNC2;
 
-non terminal String PRUEBA;
+nonterminal String PUCOMA, IDENTIF, VAR, EXP, LITERAL, STRING, ARRAYLIST, ARRAYLIST2;
 
-/* Precedencia de mayor y menos */
+nonterminal String VARARRAY, VARDECL, VARTIPO, VARTIPO1;
+
+nonterminal String FUNCDEFIN, FUNCPARAM, FUNPARAM, FUNPARAM1, FUNCBLOCK, FUNCTIPO, FUNCTIPO1, FUNVARDEC;
+
+nonterminal String INSTLIST, INSTRUC, GENBLOCK;
+
+nonterminal String ASIGOEXP, ASIGN, EXPASIARR;
+
+nonterminal String CONTINUE, BREAK, RETURN, READ, DOWHILE;
+
+nonterminal String SWITCH, SWTHCS, SWTHBLOCK;
+
+nonterminal String WRITE, WRTPARAM, WRTPARAM1;
+
+nonterminal String RDPARAM, RDPARAM1;
+
+nonterminal String IF, IFELSE;
+
+nonterminal String WHILE, WHLPARAM;
+
+nonterminal String FOR, FORPARAM;
+
+/*
+    Precedencia de menor a mayor
+    Tomado de:
+    http://en.cppreference.com/w/c/language/operator_precedence
+*/
+precedence right smbigual, smbmasigual, smbmenosigual, smbmultiplicacionigual, smbdivisionigual;
+precedence left smbor;
+precedence left smband;
+precedence left smbigualigual, smbdiferente;
+precedence left smbmayor, smbmayorigual, smbmenor, smbmenorigual;
+precedence left smbmas, smbmenos;
+precedence left smbmultiplicacion, smbdivision, smbdivisionentera;
+precedence right smbmasmas, smbmenosmenos, smbmenos, smbadmiracion;
+precedence left smbmasmas, smbmenosmenos;
 
 /* Regla inicial */
 start with INICIO;
 
 /* Reglas semánticas */
-INICIO ::= PRUEBA;
+INICIO    ::= VAROFUNC;
 
-TIPOVAR ::= smbchar:e {: System.out.println("Parser: " + e); :}
-            | smbint:e {: System.out.println("Parser: " + e); :}
-            | smblong:e {: System.out.println("Parser: " + e); :}
-            | smbshort:e {: System.out.println("Parser: " + e); :};
+// Reglas básicas
+PUCOMA    ::= smbpuntocoma:e {: print(e); :};
 
-TIPOFUNC ::= smbvoid:e {: System.out.println("Parser: " + e); :}
-            | smbchar:e {: System.out.println("Parser: " + e); :}
-            | smbint:e {: System.out.println("Parser: " + e); :}
-            | smblong:e {: System.out.println("Parser: " + e); :}
-            | smbshort:e {: System.out.println("Parser: " + e); :};
+IDENTIF   ::= smbidentificador:e {: print(e); :};
 
-PRUEBA ::= smbidentificador:e {: System.out.println("Parser: " + e); :};
+VAR       ::= IDENTIF
+            | IDENTIF smbcuadradoabrir:e {: print(e); :} EXP smbcuadradocerrar:c {: print(c); :};
+
+// Inicio de codigo que define que venga al menos una funcion
+VAROFUNC  ::= smbconst:e {: print(e); :} VAROFUNC1
+            | VAROFUNC1;
+
+VAROFUNC1 ::= smbchar:e {: print(e); :} IDENTIF VAROFUNC2
+            | smbint:e {: print(e); :} IDENTIF VAROFUNC2
+            | smblong:e {: print(e); :} IDENTIF VAROFUNC2
+            | smbshort:e {: print(e); :} IDENTIF VAROFUNC2
+            | smbvoid:e {: print(e); :} IDENTIF FUNCPARAM FUNCBLOCK FUNCDEFIN;
+
+VAROFUNC2 ::= VARARRAY PUCOMA VAROFUNC
+            | FUNCPARAM FUNCBLOCK FUNCDEFIN;
+
+// Reglas de variables
+VARDECL   ::= VARTIPO IDENTIF VARARRAY;
+
+VARTIPO   ::= smbconst:e {: print(e); :} VARTIPO1
+            | VARTIPO1;
+
+VARTIPO1  ::= smbchar:e {: print(e); :}
+            | smbint:e {: print(e); :}
+            | smblong:e {: print(e); :}
+            | smbshort:e {: print(e); :};
+
+VARARRAY  ::= smbcuadradoabrir:e {: print(e); :} LITERAL smbcuadradocerrar:c {: print(c); :}
+            | ;
+
+// Definicion de funciones
+FUNCDEFIN ::= FUNCTIPO IDENTIF FUNCPARAM FUNCBLOCK FUNCDEFIN
+            | ;
+
+// Tipos de funcion
+FUNCTIPO  ::= smbconst:e {: print(e); :} FUNCTIPO1
+            | FUNCTIPO1;
+
+FUNCTIPO1 ::= smbchar:e {: print(e); :}
+            | smbint:e {: print(e); :}
+            | smblong:e {: print(e); :}
+            | smbshort:e {: print(e); :}
+            | smbvoid:e {: print(e); :};
+
+// Parametros de funcion
+FUNCPARAM ::= smbparentabrir:e {: print(e); :} FUNPARAM smbparentcerrar:c {: print(c); :};
+
+FUNPARAM  ::= VARDECL FUNPARAM1
+            | ;
+
+FUNPARAM1 ::= smbcoma:e {: print(e); :} VARDECL FUNPARAM1
+            | ;
+
+// Bloque de funcion
+FUNCBLOCK ::= smbllaveabrir:e {: print(e); :} FUNVARDEC INSTLIST smbllavecerrar:c {: print(c); :};
+
+FUNVARDEC ::= VARDECL PUCOMA FUNVARDEC
+            | ;
+
+// Instrucciones de uso general
+INSTLIST  ::= INSTRUC INSTLIST
+            | ;
+
+INSTRUC   ::= ASIGOEXP PUCOMA
+            | CONTINUE PUCOMA
+            | BREAK PUCOMA
+            | RETURN PUCOMA
+            | READ PUCOMA
+            | WRITE PUCOMA
+            | FOR
+            | WHILE
+            | DOWHILE PUCOMA
+            | SWITCH
+            | IF;
+
+// Instruccinoes simples
+WRITE     ::= smbwrite:e {: print(e); :} WRTPARAM;
+
+WRTPARAM  ::= smbparentabrir:e {: print(e); :} EXP WRTPARAM1 smbparentcerrar:c {: print(c); :}
+            | smbparentabrir:e {: print(e); :} STRING WRTPARAM1 smbparentcerrar:c {: print(c); :};
+
+WRTPARAM1 ::= smbcoma:e EXP WRTPARAM1
+            | smbcoma:e STRING WRTPARAM1
+            | ;
+
+READ      ::= smbread:e {: print(e); :} RDPARAM;
+
+RDPARAM   ::= smbparentabrir:e {: print(e); :} RDPARAM1 smbparentcerrar:c {: print(c); :};
+
+RDPARAM1  ::= VAR
+            | ;
+
+RETURN    ::= smbreturn:e {: print(e); :}
+            | smbreturn:e {: print(e); :} EXP; 
+
+BREAK     ::= smbbreak:e {: print(e); :};
+
+CONTINUE  ::= smbcontinue:e {: print(e); :};
+
+// Bloque If
+IF        ::= smbif:e {: print(e); :} smbparentabrir:c {: print(c); :} ASIGOEXP smbparentcerrar:o {: print(o); :} GENBLOCK IFELSE;
+
+IFELSE    ::= smbelse:e {: print(e); :} GENBLOCK;
+
+// Bloque Switch
+SWITCH    ::= smbswitch:e {: print(e); :} smbparentabrir:c {: print(c); :} VAR smbparentcerrar:o {: print(o); :} SWTHBLOCK;
+
+SWTHBLOCK ::= smbllaveabrir:e {: print(e); :} SWTHCS smbllavecerrar:c {: print(c); :};
+
+SWTHCS    ::= smbcase:e {: print(e); :} LITERAL smbdospuntos:c {: print(c); :} INSTLIST SWTHCS
+            | smbdefault:e {: print(e); :} smbdospuntos:c {: print(c); :} INSTLIST;
+
+// Ciclo do while
+DOWHILE   ::= smbdo:e {: print(e); :} GENBLOCK smbwhile:c {: print(c); :} WHLPARAM;
+
+// Ciclo while
+WHILE     ::= smbwhile:e {: print(e); :} WHLPARAM GENBLOCK;
+
+WHLPARAM  ::= smbparentabrir:e {: print(e); :} ASIGOEXP smbparentcerrar:c {: print(c); :};
+
+// Ciclo for
+FOR       ::= smbfor:e {: print(e); :} FORPARAM GENBLOCK;
+
+FORPARAM  ::= smbparentabrir:e {: print(e); :} ASIGOEXP PUCOMA ASIGOEXP PUCOMA ASIGOEXP smbparentcerrar:c {: print(c); :};
+
+// Bloque de uso general
+GENBLOCK  ::= smbllaveabrir:e {: print(e); :} INSTLIST smbllavecerrar:c {: print(c); :}
+            | INSTRUC;
+
+ASIGOEXP  ::= ASIGN
+            | EXP;
+
+// Asignacion
+ASIGN     ::= VAR smbigual:e {: print(e); :} EXPASIARR
+            | VAR smbmasigual:e {: print(e); :} EXPASIARR
+            | VAR smbmenosigual:e {: print(e); :} EXPASIARR
+            | VAR smbmultiplicacionigual:e {: print(e); :} EXPASIARR
+            | VAR smbdivisionigual:e {: print(e); :} EXPASIARR;
+
+EXPASIARR ::= ARRAYLIST
+            | ASIGN
+            | EXP;
+
+// Literales
+LITERAL   ::= smbcharlit:e {: print(e); :}
+            | smbdec:e {: print(e); :}
+            | smbhex:e {: print(e); :}
+            | smboct:e {: print(e); :};
+
+// Arreglos para asignar
+ARRAYLIST ::= smbllaveabrir:e {: print(e); :} LITERAL ARRAYLIST2 smbllavecerrar:c {: print(c); :};
+
+ARRAYLIST2::= smbcoma:e LITERAL ARRAYLIST2
+            | ;
+
+STRING    ::= smbstring:e {: print(e); :};
+
+// Operaciones
+EXP       ::= smbparentabrir:e {: print(e); :} EXP smbparentcerrar:c {: print(c); :}
+            | EXP smbigualigual:e {: print(e); :} EXP
+            | EXP smbmayorigual:e {: print(e); :} EXP
+            | EXP smbmayor:e {: print(e); :} EXP
+            | EXP smbmenorigual:e {: print(e); :} EXP
+            | EXP smbmenor:e {: print(e); :} EXP
+            | EXP smbdiferente:e {: print(e); :} EXP
+            | EXP smbor:e {: print(e); :} EXP
+            | EXP smband:e {: print(e); :} EXP
+            | EXP smbmas:e {: print(e); :} EXP
+            | EXP smbmenos:e {: print(e); :} EXP
+            | smbmenos:e {: print(e); :} EXP
+            | EXP smbmultiplicacion:e {: print(e); :} EXP
+            | EXP smbdivision:e {: print(e); :} EXP
+            | EXP smbdivisionentera:e {: print(e); :} EXP
+            | smbadmiracion:e {: print(e); :} EXP
+            | EXP smbmasmas:e {: print(e); :}
+            | smbmasmas:e {: print(e); :} EXP
+            | EXP smbmenosmenos:e {: print(e); :}
+            | smbmenosmenos:e {: print(e); :} EXP
+            | VAR
+            | LITERAL;

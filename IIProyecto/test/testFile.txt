@@ -1,1 +1,42 @@
-rbol
+const char a;
+int b;
+short z[2];
+
+long adios;
+
+// esto es un comentario magico
+
+int main() {
+	z = {1,2,3};
+	return 1;
+}
+
+const char lol(int a, char b) {
+	int a;
+	char b;
+
+	a = b = b + 1 == !Z[0];
+
+	/*
+		Comentario para ignorar ^&^*&*&
+	*/
+
+	do {
+		switch (indentifidcador) {
+			case 1:
+				var += 1;
+			case 4:
+				write("asdf");
+			default:
+				write(1+1);
+		}
+	} while(a == 2);
+
+	for (a = 1; a < 5; a++) {
+		while(a)
+			write (adios + vamos[1 - ye90]);
+
+		variable1 += variable2 - !false;
+		
+	}
+}
