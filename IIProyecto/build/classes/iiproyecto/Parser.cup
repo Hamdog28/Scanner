@@ -12,7 +12,7 @@ parser code
         int fila = s.right;
         int columna = s.left;
         
-        System.out.println("Error sintactico en la fila " + fila + ", columna " + columna + ": Token inesperado <" + lexema + ">");
+        System.out.println("Error sintáctico en la fila " + fila + ", columna " + columna + ": Token inesperado <" + lexema + ">");
     }
 
     //Metodo al que se llama en el momento en que ya no es posible una recuperacion de errores
@@ -23,7 +23,7 @@ parser code
         int columna = s.left;
         
         System.out.println("¡No se pudo recuperar!");
-        System.out.println("Terror sintactico en la fila " + fila + ", columna " + columna + ": Token inesperado <" + lexema + ">");
+        System.out.println("Terror sintáctico en la fila " + fila + ", columna " + columna + ": Token inesperado <" + lexema + ">");
     }
 :}
 
@@ -100,9 +100,9 @@ nonterminal String INICIO, VAROFUNC, VAROFUNC1, VAROFUNC2;
 
 nonterminal String PUCOMA, IDENTIF, VAR, EXP, LITERAL, STRING, ARRAYLIST, ARRAYLIST2;
 
-nonterminal String VARARRAY, VARDECL, VARTIPO, VARTIPO1;
+nonterminal String VARARRAY, VARDECL, VARDECL2, VARTIPO, VARTIPO1, VARASIG;
 
-nonterminal String FUNCDEFIN, FUNCPARAM, FUNPARAM, FUNPARAM1, FUNCBLOCK, FUNCTIPO, FUNCTIPO1, FUNVARDEC;
+nonterminal String FUNCDEFIN, FUNCPARAM, FUNPARAM, FUNPARAM1, FUNCBLOCK, FUNCTIPO, FUNCTIPO1, FUNVARDEC, FUNPARDEC;
 
 nonterminal String INSTLIST, INSTRUC, GENBLOCK;
 
@@ -136,6 +136,7 @@ precedence left smbmas, smbmenos;
 precedence left smbmultiplicacion, smbdivision, smbdivisionentera;
 precedence right smbmasmas, smbmenosmenos, smbmenos, smbadmiracion;
 precedence left smbmasmas, smbmenosmenos;
+precedence nonassoc smbelse;
 
 /* Regla inicial */
 start with INICIO;
@@ -161,11 +162,14 @@ VAROFUNC1 ::= smbchar:e {: print(e); :} IDENTIF VAROFUNC2
             | smbshort:e {: print(e); :} IDENTIF VAROFUNC2
             | smbvoid:e {: print(e); :} IDENTIF FUNCPARAM FUNCBLOCK FUNCDEFIN;
 
-VAROFUNC2 ::= VARARRAY PUCOMA VAROFUNC
+VAROFUNC2 ::= VARARRAY VARDECL2 PUCOMA VAROFUNC
             | FUNCPARAM FUNCBLOCK FUNCDEFIN;
 
 // Reglas de variables
-VARDECL   ::= VARTIPO IDENTIF VARARRAY;
+VARDECL   ::= VARTIPO IDENTIF VARARRAY VARDECL2;
+
+VARDECL2  ::= smbcoma:e {: print(e); :} IDENTIF VARARRAY VARDECL2
+            | ;
 
 VARTIPO   ::= smbconst:e {: print(e); :} VARTIPO1
             | VARTIPO1;
@@ -175,7 +179,10 @@ VARTIPO1  ::= smbchar:e {: print(e); :}
             | smblong:e {: print(e); :}
             | smbshort:e {: print(e); :};
 
-VARARRAY  ::= smbcuadradoabrir:e {: print(e); :} LITERAL smbcuadradocerrar:c {: print(c); :}
+VARARRAY  ::= smbcuadradoabrir:e {: print(e); :} LITERAL smbcuadradocerrar:c {: print(c); :} VARARRAY
+            | VARASIG;
+
+VARASIG   ::= smbigual:e {: print(e); :} EXPASIARR
             | ;
 
 // Definicion de funciones
@@ -195,11 +202,13 @@ FUNCTIPO1 ::= smbchar:e {: print(e); :}
 // Parametros de funcion
 FUNCPARAM ::= smbparentabrir:e {: print(e); :} FUNPARAM smbparentcerrar:c {: print(c); :};
 
-FUNPARAM  ::= VARDECL FUNPARAM1
+FUNPARAM  ::= FUNPARDEC FUNPARAM1
             | ;
 
-FUNPARAM1 ::= smbcoma:e {: print(e); :} VARDECL FUNPARAM1
+FUNPARAM1 ::= smbcoma:e {: print(e); :} FUNPARDEC FUNPARAM1
             | ;
+
+FUNPARDEC ::= VARTIPO IDENTIF;
 
 // Bloque de funcion
 FUNCBLOCK ::= smbllaveabrir:e {: print(e); :} FUNVARDEC INSTLIST smbllavecerrar:c {: print(c); :};
@@ -250,7 +259,8 @@ CONTINUE  ::= smbcontinue:e {: print(e); :};
 // Bloque If
 IF        ::= smbif:e {: print(e); :} smbparentabrir:c {: print(c); :} ASIGOEXP smbparentcerrar:o {: print(o); :} GENBLOCK IFELSE;
 
-IFELSE    ::= smbelse:e {: print(e); :} GENBLOCK;
+IFELSE    ::= smbelse:e {: print(e); :} GENBLOCK
+            | ;
 
 // Bloque Switch
 SWITCH    ::= smbswitch:e {: print(e); :} smbparentabrir:c {: print(c); :} VAR smbparentcerrar:o {: print(o); :} SWTHBLOCK;
@@ -300,7 +310,7 @@ LITERAL   ::= smbcharlit:e {: print(e); :}
 // Arreglos para asignar
 ARRAYLIST ::= smbllaveabrir:e {: print(e); :} LITERAL ARRAYLIST2 smbllavecerrar:c {: print(c); :};
 
-ARRAYLIST2::= smbcoma:e LITERAL ARRAYLIST2
+ARRAYLIST2::= smbcoma:e {: print(e); :} LITERAL ARRAYLIST2
             | ;
 
 STRING    ::= smbstring:e {: print(e); :};
