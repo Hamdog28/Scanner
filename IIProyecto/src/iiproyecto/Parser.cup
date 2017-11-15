@@ -100,6 +100,8 @@ nonterminal String INICIO, VAROFUNC, VAROFUNC1, VAROFUNC2;
 
 nonterminal String PUCOMA, IDENTIF, VAR, EXP, LITERAL, STRING, ARRAYLIST, ARRAYLIST2;
 
+nonterminal String LAMFUNC, LAMFUNCP, LAMFUNCP2;
+
 nonterminal String VARARRAY, VARDECL, VARDECL2, VARTIPO, VARTIPO1, VARASIG;
 
 nonterminal String FUNCDEFIN, FUNCPARAM, FUNPARAM, FUNPARAM1, FUNCBLOCK, FUNCTIPO, FUNCTIPO1, FUNVARDEC, FUNPARDEC;
@@ -152,6 +154,14 @@ IDENTIF   ::= smbidentificador:e {: print(e); :};
 VAR       ::= IDENTIF
             | IDENTIF smbcuadradoabrir:e {: print(e); :} EXP smbcuadradocerrar:c {: print(c); :};
 
+LAMFUNC   ::= IDENTIF smbparentabrir:e {: print(e); :} LAMFUNCP smbparentcerrar:c {: print(c); :};
+
+LAMFUNCP  ::= EXP LAMFUNCP2
+            | ;
+
+LAMFUNCP2 ::= smbcoma:e {: print(e); :} EXP LAMFUNCP2
+            | ;
+
 // Inicio de codigo que define que venga al menos una funcion
 VAROFUNC  ::= smbconst:e {: print(e); :} VAROFUNC1
             | VAROFUNC1;
@@ -160,7 +170,8 @@ VAROFUNC1 ::= smbchar:e {: print(e); :} IDENTIF VAROFUNC2
             | smbint:e {: print(e); :} IDENTIF VAROFUNC2
             | smblong:e {: print(e); :} IDENTIF VAROFUNC2
             | smbshort:e {: print(e); :} IDENTIF VAROFUNC2
-            | smbvoid:e {: print(e); :} IDENTIF FUNCPARAM FUNCBLOCK FUNCDEFIN;
+            | smbvoid:e {: print(e); :} IDENTIF FUNCPARAM FUNCBLOCK FUNCDEFIN
+            | error {: print("Error en la declaración"); :} VAROFUNC;
 
 VAROFUNC2 ::= VARARRAY VARDECL2 PUCOMA VAROFUNC
             | FUNCPARAM FUNCBLOCK FUNCDEFIN;
@@ -230,13 +241,15 @@ INSTRUC   ::= ASIGOEXP PUCOMA
             | WHILE
             | DOWHILE PUCOMA
             | SWITCH
-            | IF;
+            | IF
+            | error {: print("Error en la instruccion"); :} PUCOMA;
 
 // Instruccinoes simples
 WRITE     ::= smbwrite:e {: print(e); :} WRTPARAM;
 
 WRTPARAM  ::= smbparentabrir:e {: print(e); :} EXP WRTPARAM1 smbparentcerrar:c {: print(c); :}
-            | smbparentabrir:e {: print(e); :} STRING WRTPARAM1 smbparentcerrar:c {: print(c); :};
+            | smbparentabrir:e {: print(e); :} STRING WRTPARAM1 smbparentcerrar:c {: print(c); :}
+            | error {: print("Debe venir al menos un parametro"); :} smbparentcerrar:c {: print(c); :};
 
 WRTPARAM1 ::= smbcoma:e EXP WRTPARAM1
             | smbcoma:e STRING WRTPARAM1
@@ -244,13 +257,14 @@ WRTPARAM1 ::= smbcoma:e EXP WRTPARAM1
 
 READ      ::= smbread:e {: print(e); :} RDPARAM;
 
-RDPARAM   ::= smbparentabrir:e {: print(e); :} RDPARAM1 smbparentcerrar:c {: print(c); :};
+RDPARAM   ::= smbparentabrir:e {: print(e); :} RDPARAM1 smbparentcerrar:c {: print(c); :}
+            | error {: print("Mas parametros de los esperados"); :} smbparentcerrar:c {: print(c); :};
 
 RDPARAM1  ::= VAR
             | ;
 
 RETURN    ::= smbreturn:e {: print(e); :}
-            | smbreturn:e {: print(e); :} EXP; 
+            | smbreturn:e {: print(e); :} EXP;
 
 BREAK     ::= smbbreak:e {: print(e); :};
 
@@ -299,7 +313,8 @@ ASIGN     ::= VAR smbigual:e {: print(e); :} EXPASIARR
 
 EXPASIARR ::= ARRAYLIST
             | ASIGN
-            | EXP;
+            | EXP
+            | error {: print("Error en la asignacion"); :};
 
 // Literales
 LITERAL   ::= smbcharlit:e {: print(e); :}
@@ -337,4 +352,5 @@ EXP       ::= smbparentabrir:e {: print(e); :} EXP smbparentcerrar:c {: print(c)
             | EXP smbmenosmenos:e {: print(e); :}
             | smbmenosmenos:e {: print(e); :} EXP
             | VAR
+            | LAMFUNC
             | LITERAL;

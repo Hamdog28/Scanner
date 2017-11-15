@@ -398,7 +398,7 @@ class Lexer implements java_cup.runtime.Scanner {
 
 	private Symbol simbolo(String texto, int tipo, Object valor) {
 		System.out.println("Lexer: " + texto);
-		return new Symbol(tipo, yycolumn, yyline, valor);
+		return new Symbol(tipo, yycolumn + 1, yyline + 1, valor);
 	}
 
 
@@ -765,7 +765,7 @@ class Lexer implements java_cup.runtime.Scanner {
       if (zzInput == YYEOF && zzStartRead == zzCurrentPos) {
         zzAtEOF = true;
             zzDoEOF();
-          {   return new Symbol(Simbolos.EOF, yycolumn, yyline, yytext());
+          {   return new Symbol(Simbolos.EOF, yycolumn + 1, yyline + 1, yytext());
  }
       }
       else {
@@ -779,7 +779,7 @@ class Lexer implements java_cup.runtime.Scanner {
             }
           case 77: break;
           case 3: 
-            { System.out.println("Error lexico en la linea " + yyline + ", columna " + yycolumn + " : Caracter ilegal <"+ yytext()+">");
+            { System.out.println("Error lexico en la linea " + (yyline + 1) + ", columna " + (yycolumn + 1) + " : Caracter ilegal <"+ yytext()+">");
             }
           case 78: break;
           case 4: 

@@ -29,13 +29,13 @@ import java_cup.runtime.*;
 
 	private Symbol simbolo(String texto, int tipo, Object valor) {
 		System.out.println("Lexer: " + texto);
-		return new Symbol(tipo, yycolumn, yyline, valor);
+		return new Symbol(tipo, yycolumn + 1, yyline + 1, valor);
 	}
 %}
 
 /* Simbolo de End Of File */
 %eofval{
-  return new Symbol(Simbolos.EOF, yycolumn, yyline, yytext());
+  return new Symbol(Simbolos.EOF, yycolumn + 1, yyline + 1, yytext());
 %eofval}
 
 /* Definición de variables */
@@ -143,7 +143,7 @@ NOASCII = [\x80-\xFF]
 	{Ident}			{ return simbolo("Identif: " + yytext(), Simbolos.smbidentificador, yytext()); }
 
 	/* Error si no encuentra coincidencias */
-	[^]|\n 			{ System.out.println("Error lexico en la linea " + yyline + ", columna " + yycolumn + " : Caracter ilegal <"+ yytext()+">"); }
+	[^]|\n 			{ System.out.println("Error lexico en la linea " + (yyline + 1) + ", columna " + (yycolumn + 1) + " : Caracter ilegal <"+ yytext()+">"); }
 	
 }
 
