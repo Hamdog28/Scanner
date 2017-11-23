@@ -397,7 +397,7 @@ class Lexer implements java_cup.runtime.Scanner {
 	StringBuffer string = new StringBuffer();
 
 	private Symbol simbolo(String texto, int tipo, Object valor) {
-		System.out.println("Lexer: " + texto);
+		//System.out.println("Lexer: " + texto);
 		return new Symbol(tipo, yycolumn + 1, yyline + 1, valor);
 	}
 

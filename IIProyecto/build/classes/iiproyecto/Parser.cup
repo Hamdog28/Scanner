@@ -30,7 +30,7 @@ parser code
 action code
 {:
     private void print(String msg) {
-        System.out.println("Parser: " + msg);
+        //System.out.println("Parser: " + msg);
     }
 :}
 
