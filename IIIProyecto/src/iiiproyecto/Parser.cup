@@ -1,4 +1,4 @@
-package iiproyecto;
+package iiiproyecto;
 
 import java_cup.runtime.*;
 
@@ -31,6 +31,9 @@ parser code
 
 action code
 {:
+    //Esta clase contiene tablas y pilas semanticas
+    private Semanter sm = new Semanter();
+
     private void print(String msg) {
         //System.out.println("Parser: " + msg);
     }
@@ -151,7 +154,7 @@ INICIO    ::= VAROFUNC;
 // Reglas básicas
 PUCOMA    ::= smbpuntocoma:e {: print(e); :};
 
-IDENTIF   ::= smbidentificador:e {: print(e); :};
+IDENTIF   ::= smbidentificador:e {: RESULT = e; print(e); :};
 
 VAR       ::= IDENTIF
             | IDENTIF smbcuadradoabrir:e {: print(e); :} EXP smbcuadradocerrar:c {: print(c); :};
@@ -179,18 +182,18 @@ VAROFUNC2 ::= VARARRAY VARDECL2 PUCOMA VAROFUNC
             | FUNCPARAM FUNCBLOCK FUNCDEFIN;
 
 // Reglas de variables
-VARDECL   ::= VARTIPO IDENTIF VARARRAY VARDECL2;
+VARDECL   ::= VARTIPO:v {: sm.guardar_tipo(v); :} IDENTIF:i {: sm.guardar_id(i, true); :} VARARRAY VARDECL2;
 
-VARDECL2  ::= smbcoma:e {: print(e); :} IDENTIF VARARRAY VARDECL2
+VARDECL2  ::= smbcoma:e {: print(e); :} IDENTIF:i {: sm.guardar_id(i, true); :} VARARRAY VARDECL2
             | ;
 
-VARTIPO   ::= smbconst:e {: print(e); :} VARTIPO1
-            | VARTIPO1;
+VARTIPO   ::= smbconst:e {: print(e); :} VARTIPO1:v {: RESULT = v; :}
+            | VARTIPO1:v {: RESULT = v; :};
 
-VARTIPO1  ::= smbchar:e {: print(e); :}
-            | smbint:e {: print(e); :}
-            | smblong:e {: print(e); :}
-            | smbshort:e {: print(e); :};
+VARTIPO1  ::= smbchar:e {: RESULT = e; print(e); :}
+            | smbint:e {: RESULT = e; print(e); :}
+            | smblong:e {: RESULT = e; print(e); :}
+            | smbshort:e {: RESULT = e; print(e); :};
 
 VARARRAY  ::= smbcuadradoabrir:e {: print(e); :} LITERAL smbcuadradocerrar:c {: print(c); :} VARARRAY
             | VARASIG;
@@ -226,7 +229,7 @@ FUNPARDEC ::= VARTIPO IDENTIF;
 // Bloque de funcion
 FUNCBLOCK ::= smbllaveabrir:e {: print(e); :} FUNVARDEC INSTLIST smbllavecerrar:c {: print(c); :};
 
-FUNVARDEC ::= VARDECL PUCOMA FUNVARDEC
+FUNVARDEC ::= VARDECL PUCOMA {: sm.declarar_variables(); :} FUNVARDEC
             | ;
 
 // Instrucciones de uso general

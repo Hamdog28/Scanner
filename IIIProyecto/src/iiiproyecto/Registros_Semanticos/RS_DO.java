@@ -14,9 +14,6 @@ public class RS_DO {
     
     private String valor;
     
-
-    
-    
     public String getTipo() {
         return tipo;
     }

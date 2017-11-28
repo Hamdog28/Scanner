@@ -1,4 +1,4 @@
-package iiproyecto;
+package iiiproyecto;
 
 import java_cup.runtime.*;
 
@@ -139,7 +139,6 @@ NOASCII = [\x80-\xFF]
 	/* Este comentario no hace nada, pero no se borra ' */
 
 	/* Identificadores */ 
-	//(({Ident}{NOASCII}+|{NOASCII}+{Ident}){Ident}*)+ {System.out.println("Error lexico en la linea " + yyline + ", columna " + yycolumn + " : Caracter ilegal <"+ yytext()+">");} /*Se vuela las tildes*/
 	{Ident}			{ return simbolo("Identif: " + yytext(), Simbolos.smbidentificador, yytext()); }
 
 	/* Error si no encuentra coincidencias */
