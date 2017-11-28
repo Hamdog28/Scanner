@@ -4,7 +4,7 @@
 // Wed Nov 15 11:02:58 CST 2017
 //----------------------------------------------------
 
-package iiproyecto;
+package iiiproyecto;
 
 /** CUP generated class containing symbol constants. */
 public class Simbolos {

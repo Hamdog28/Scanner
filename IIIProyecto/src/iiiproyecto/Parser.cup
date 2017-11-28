@@ -2,6 +2,7 @@ package iiproyecto;
 
 import java_cup.runtime.*;
 
+
 /* Condigo personalizado para el parser */
 parser code
 {:
@@ -25,6 +26,7 @@ parser code
         System.out.println("¡No se pudo recuperar!");
         System.out.println("Terror sintáctico en la fila " + fila + ", columna " + columna + ": Token inesperado <" + lexema + ">");
     }
+    public void guardar_id(){}
 :}
 
 action code
