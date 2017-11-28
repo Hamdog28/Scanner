@@ -31,16 +31,19 @@ public class Semanter {
     //busca si existe la variable en la tabla de simbolos
     public boolean buscar_Var_TS(String token){
         //se busca el token en la tabla de simbolos
-        for(int i = 0;TS.get(i)!=null;i++){
+        
+        for(int i = 0;i<TS.size();i++){
             //se verifica que sea de tipo variable
             if(TS.get(i) instanceof RS_Variable){
                 RS_Variable aux =(RS_Variable)TS.get(i);
                 //se evalua se se llaman igual
                 if (aux.getNombre().equals(token)){
                     //se busca en la pila si se esta dentro de una funcion
-                    for(int j = 0;PILA.get(j)!= null;j++){
+                    for(int j = (PILA.size()-1);j>=0;j--){
+                        
                         //Se verifica que sea de tipo RS_Funcion 
                         if(PILA.get(j) instanceof RS_Funcion ){
+                            
                             RS_Funcion aux2 = (RS_Funcion)PILA.get(j);
                             //se verifica que la variable sea de esa funcion o sea global
                             if(aux2.getNombre().equals(aux.getAmbito())|| aux.getAmbito().equals("global")){
@@ -48,6 +51,8 @@ public class Semanter {
                             }
                             break;
                         }
+                        else if(aux.getAmbito().equals("global"))
+                            return true;
                     }
                 }
             }
@@ -56,7 +61,7 @@ public class Semanter {
     }
     //busca si existe la funcion en la tabla de simbolos
     public boolean buscar_Fun_TS(String token){
-        for(int i = 0;TS.get(i)!=null;i++){
+        for(int i = 0;i<TS.size();i++){
             //se verifica que sea de tipo funcion
             if(TS.get(i) instanceof RS_Funcion){
                 RS_Funcion aux =(RS_Funcion)TS.get(i);
@@ -263,22 +268,25 @@ public class Semanter {
                 break;
             }
         }
-        for(int i=PILA.size()-1;i<=0;i--){
+        
+        for(int i=(PILA.size()-1);i>=0;i--){
+            
             //se busca el nombre de la variable a definir
             if(PILA.get(i) instanceof RS_DO && ((RS_DO)PILA.get(i)).getTipo().equals("direccion")){
+                
                 //se verifica que la variable no exista en la tabla de simbolos
                 if(!buscar_Var_TS(((RS_DO)PILA.get(i)).getValor())){
+                    
                     RS_Variable var = new RS_Variable();
                     //se le asignan los valores a la variable para ser ingresada en la tabla de simbolos
                     var.setAmbito(ambito);
                     var.setNombre(((RS_DO)PILA.get(i)).getValor());
                     var.setTipo(tipo);
-                    
                     //se agrega la variable a la tabla de simbolos
                     TS.add(var);
                 }
                 else{
-                    System.out.println("Error, variable definida");
+                    System.out.println("Error, variable "+((RS_DO)PILA.get(i)).getValor()+ " definida");
                 }
                 //se hace POP de la variable
                 PILA.remove(i);
