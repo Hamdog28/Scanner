@@ -157,7 +157,7 @@ NOASCII = [\x80-\xFF]
 }
 
 <CHARLITERAL> {
-    [^\r\n\'\\]\'	{ yybegin(YYINITIAL); return simbolo("CHAR: " + yytext().charAt(0), Simbolos.smbcharlit, String.valueOf(yytext().charAt(0))); }
+    [^\r\n\'\\]\'	{ yybegin(YYINITIAL); return simbolo("CHAR: " + yytext().charAt(0), Simbolos.smbcharlit, "'" + String.valueOf(yytext().charAt(0))); }
     "\\b"\'			{ yybegin(YYINITIAL); return simbolo("CHAR: " + "\b", Simbolos.smbcharlit, "\b"); }
     "\\t"\'			{ yybegin(YYINITIAL); return simbolo("CHAR: " + "\t", Simbolos.smbcharlit, "\t"); }
     "\\n"\'			{ yybegin(YYINITIAL); return simbolo("CHAR: " + "\n", Simbolos.smbcharlit, "\n"); }
