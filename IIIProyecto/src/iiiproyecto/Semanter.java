@@ -89,7 +89,7 @@ public class Semanter {
         //si no es una declaracion entra si no se ha definido la variable
         
         if(!declaracion && !buscar_Var_TS(id.getValor()))
-            System.out.println("error, variable no definida"); // mensaje de error provisional
+            System.out.println("Error, variable "+ token +" no definida"); // mensaje de error provisional
        
         PILA.add(id);
     }
@@ -129,7 +129,7 @@ public class Semanter {
        
         //se verifica que la funcion llamada exista
         if(!buscar_Fun_TS(token) && !declaracion)
-            System.out.println("Error, funcion no definida");
+            System.out.println("Error, funcion "+ token +" no definida");
         
         PILA.add(funcion);
     }
@@ -185,23 +185,21 @@ public class Semanter {
                             }
                         }
                     }
-                        }}
+                }
+        }
 
     }
     
     
     /*
     Falta:
-    -tipo de parametos -> a medias
-    -llamado de una funcion
-    -while
-    -if
-    -imprimir TS
+   
     -toda la traduccion
     */
     
     //se ejecuta antes de la "," o el ")"
     public void guardar_parametros_id(String token){
+        print("guardar parametro: " + token);
         //agarra el ultimo elemento de la lista -> el tipo del parametro
         String tipo=((RS_DO)PILA.get(PILA.size()-1)).getValor();
         RS_Parametro param = new RS_Parametro(); //variable que se va a guardar en la pila
@@ -236,11 +234,13 @@ public class Semanter {
     
     //se ejecuta cuando se llega al ")" de una funcion
     public void declarar_funcion(){
+        print("declarar_funcion");
         ArrayList<RS_Parametro> parametros = new ArrayList();
         String tipo="";
         String nombre="";
+        String var="";
         RS_Funcion funcion = new RS_Funcion();
-        RS_Variable param_aux = new RS_Variable();
+        
         
         for(int i = PILA.size()-1; i>=0; i--){
              //se saca el nombre de la funcion de la pila
@@ -258,21 +258,33 @@ public class Semanter {
                 //RS_Parametro param = new RS_Parametro();
                 RS_Parametro param;
                 param = (RS_Parametro)PILA.get(i);
+                var = param.getNombre();
+                PILA.remove(i);
                 //se verifica que los parametros se llamen diferente
+                if(parametros.isEmpty()){
+                    RS_Variable param_aux = new RS_Variable();
+                        param_aux.setNombre(var);
+                        param_aux.setTipo(param.getTipo());
+                        param_aux.setAmbito(nombre);
+                        TS.add(param_aux);
+                }
+                
                 for(int j = 0; j<parametros.size();j++){
-                    if(parametros.get(j).getNombre().equals(param.getNombre())){
-                        System.out.println("Error, parametro previamente definido");
+                    if(parametros.get(j).getNombre().equals(var)){
+                        System.out.println("Error, parametro "+ param.getNombre() +" previamente definido");
                         break;
                     }
                     else if(j==0){
                         //se crea objeto variable para guardar en la tabla de simbolos
-                        param_aux.setNombre(param.getNombre());
+                        RS_Variable param_aux = new RS_Variable();
+                        param_aux.setNombre(var);
                         param_aux.setTipo(param.getTipo());
                         param_aux.setAmbito(nombre);
                         TS.add(param_aux);
                     }
                 }
                 parametros.add(param);
+                
             }
             
             //se saca el tipo de la funcion de la pila
@@ -282,7 +294,7 @@ public class Semanter {
                 PILA.remove(i);  
                 break;
             }
-            PILA.remove(i);    
+            //PILA.remove(i);    
         }
         //Se crea objeto funcion con los datos sacados de la pila
         funcion.setNombre(nombre);
@@ -348,7 +360,22 @@ public class Semanter {
                     TS.add(var);
                 }
                 else{
-                    System.out.println("Error, variable "+((RS_DO)PILA.get(i)).getValor()+ " definida anteriormente");
+                    for(int j=0;j<TS.size();j++){
+                        if(TS.get(j)instanceof RS_Variable && ((RS_Variable)TS.get(j)).getNombre().equals(((RS_DO)PILA.get(i)).getValor()) && ((RS_Variable)TS.get(j)).getAmbito().equals("global") && !ambito.equals("global")){
+                            RS_Variable var = new RS_Variable();
+                            //se le asignan los valores a la variable para ser ingresada en la tabla de simbolos
+                            var.setAmbito(ambito);
+                            var.setNombre(((RS_DO)PILA.get(i)).getValor());
+                            var.setTipo(tipo);
+                            //se agrega la variable a la tabla de simbolos
+                            TS.add(var);
+                            
+                            break;
+                        }
+                        else if(j==0)
+                            System.out.println("Error, variable "+((RS_DO)PILA.get(i)).getValor()+ " definida anteriormente");
+                    }
+                    
                 }
                 //se hace POP de la variable
                 PILA.remove(i);
