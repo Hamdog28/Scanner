@@ -35,7 +35,7 @@ action code
     private Semanter sm = new Semanter();
 
     private void print(String msg) {
-        System.out.println("Parser: " + msg);
+        //System.out.println("Parser: " + msg);
     }
 :}
 
@@ -156,15 +156,15 @@ PUCOMA    ::= smbpuntocoma:e {: print(e); :};
 
 IDENTIF   ::= smbidentificador:e {: RESULT = e; print(e); :};
 
-VAR       ::= IDENTIF
-            | IDENTIF smbcuadradoabrir:e {: print(e); :} EXP smbcuadradocerrar:c {: print(c); :};
+VAR       ::= IDENTIF:i {: sm.guardar_id(i, false); :}
+            | IDENTIF:i {: sm.guardar_id(i, false); :} smbcuadradoabrir:e {: print(e); :} EXP smbcuadradocerrar:c {: print(c); :};
 
-LAMFUNC   ::= IDENTIF smbparentabrir:e {: print(e); :} LAMFUNCP smbparentcerrar:c {: print(c); :};
+LAMFUNC   ::= IDENTIF:i {: sm.guardar_funcion(i, false); :} smbparentabrir:e {: print(e); :} LAMFUNCP smbparentcerrar:c {: sm.evaluar_funcion(); print(c); :};
 
 LAMFUNCP  ::= EXP LAMFUNCP2
             | ;
 
-LAMFUNCP2 ::= smbcoma:e {: print(e); :} EXP LAMFUNCP2
+LAMFUNCP2 ::= smbcoma:c {: print(c); :} EXP LAMFUNCP2
             | ;
 
 // Inicio de codigo que define que venga al menos una funcion
