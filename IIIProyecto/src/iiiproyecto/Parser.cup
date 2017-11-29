@@ -35,7 +35,7 @@ action code
     private Semanter sm = new Semanter();
 
     private void print(String msg) {
-        //System.out.println("Parser: " + msg);
+        System.out.println("Parser: " + msg);
     }
 :}
 
@@ -171,15 +171,15 @@ LAMFUNCP2 ::= smbcoma:e {: print(e); :} EXP LAMFUNCP2
 VAROFUNC  ::= smbconst:e {: print(e); :} VAROFUNC1
             | VAROFUNC1;
 
-VAROFUNC1 ::= smbchar:e {: sm.guardar_tipo(e); print(e); :} IDENTIF:i {: sm.guardar_id(i, true); :} VAROFUNC2
-            | smbint:e {: sm.guardar_tipo(e); print(e); :} IDENTIF:i {: sm.guardar_id(i, true); :} VAROFUNC2
-            | smblong:e {: sm.guardar_tipo(e); print(e); :} IDENTIF:i {: sm.guardar_id(i, true); :} VAROFUNC2
-            | smbshort:e {: sm.guardar_tipo(e); print(e); :} IDENTIF:i {: sm.guardar_id(i, true); :} VAROFUNC2
+VAROFUNC1 ::= smbchar:e {: sm.guardar_tipo(e); print(e); :} VAROFUNC2
+            | smbint:e {: sm.guardar_tipo(e); print(e); :} VAROFUNC2
+            | smblong:e {: sm.guardar_tipo(e); print(e); :} VAROFUNC2
+            | smbshort:e {: sm.guardar_tipo(e); print(e); :} VAROFUNC2
             | smbvoid:e {: sm.guardar_tipo(e); print(e); :} IDENTIF:i {: sm.guardar_funcion(i, true); :} FUNCPARAM FUNCBLOCK FUNCDEFIN
             | error {: print("Error en la declaración"); :} VAROFUNC;
 
-VAROFUNC2 ::= VARARRAY VARDECL2 PUCOMA {: sm.declarar_variables(); :} VAROFUNC
-            | FUNCPARAM FUNCBLOCK FUNCDEFIN;
+VAROFUNC2 ::= IDENTIF:i {: sm.guardar_id(i, true); :} VARARRAY VARDECL2 PUCOMA {: sm.declarar_variables(); :} VAROFUNC
+            | IDENTIF:i {: sm.guardar_funcion(i, true); :} FUNCPARAM FUNCBLOCK FUNCDEFIN;
 
 // Reglas de variables
 VARDECL   ::= VARTIPO:v {: sm.guardar_tipo(v); :} IDENTIF:i {: sm.guardar_id(i, true); :} VARARRAY VARDECL2;
@@ -202,7 +202,7 @@ VARASIG   ::= smbigual:e {: print(e); :} EXPASIARR
             | ;
 
 // Definicion de funciones
-FUNCDEFIN ::= FUNCTIPO:v {: sm.guardar_tipo(v); :} IDENTIF:i {: sm.guardar_id(i, true); :} FUNCPARAM FUNCBLOCK FUNCDEFIN
+FUNCDEFIN ::= FUNCTIPO:v {: sm.guardar_tipo(v); :} IDENTIF:i {: sm.guardar_funcion(i, true); :} FUNCPARAM FUNCBLOCK FUNCDEFIN
             | ;
 
 // Tipos de funcion
@@ -227,7 +227,7 @@ FUNPARAM1 ::= smbcoma:e {: print(e); :} FUNPARDEC FUNPARAM1
 FUNPARDEC ::= VARTIPO:v {: sm.guardar_tipo(v); :} IDENTIF:i {: sm.guardar_parametros_id(i); :};
 
 // Bloque de funcion
-FUNCBLOCK ::= smbllaveabrir:e {: print(e); :} FUNVARDEC INSTLIST smbllavecerrar:c {: print(c); :};
+FUNCBLOCK ::= smbllaveabrir:e {: print(e); :} FUNVARDEC INSTLIST smbllavecerrar:c {: sm.fin_funcion(); print(c); :};
 
 FUNVARDEC ::= VARDECL PUCOMA {: sm.declarar_variables(); :} FUNVARDEC
             | ;
