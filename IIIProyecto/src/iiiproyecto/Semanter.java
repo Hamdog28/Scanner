@@ -429,7 +429,9 @@ public class Semanter {
         return false;
     }
     
-    public void printTablaSimbolos() {        
+    public void printTablaSimbolos() {
+        System.out.println("Tabla de simbolos");
+        
         for (Object obj: TS) {
             if (obj instanceof RS_Variable){
                 RS_Variable variable = (RS_Variable)obj;
@@ -438,7 +440,7 @@ public class Semanter {
             }
             else if (obj instanceof RS_Funcion){
                 RS_Funcion variable = (RS_Funcion)obj;
-                System.out.println("Identificador de varaible: ");
+                System.out.println("Identificador de funcion: ");
                 System.out.println(variable.getTipo() + " - " + variable.getNombre());
             }
             System.out.println("");

@@ -148,7 +148,7 @@ precedence nonassoc smbelse;
 start with INICIO;
 
 /* Reglas semánticas */
-INICIO    ::= VAROFUNC;
+INICIO    ::= VAROFUNC {: sm.printTablaSimbolos(); :};
 
 // Reglas básicas
 PUCOMA    ::= smbpuntocoma:e {: print(e); :};
