@@ -176,7 +176,9 @@ public class Semanter {
                     if(buscar_Var_TS(params.get(i).getValor())){
                         for(int j = 0; j<TS.size();j++){
                             if(TS.get(j) instanceof RS_Variable && ((RS_Variable)TS.get(j)).getNombre().equals(params.get(i).getValor())){
-                                
+                                if(!((RS_Variable)TS.get(j)).getTipo().equals(funcion.getParametros().get(i).getTipo())){
+                                    System.out.println("Error, parametro"+ (params.size()-i) +"de tipo incorrecto");
+                                }
                             }
                         }
                     }
@@ -320,7 +322,7 @@ public class Semanter {
             //se busca el tipo int/char/float
             if(PILA.get(i) instanceof RS_DO && ((RS_DO)PILA.get(i)).getTipo().equals("tipo")){
                 //se guarda el tipo de la declaracion
-                tipo=((RS_DO)PILA.get(i)).getTipo();
+                tipo=((RS_DO)PILA.get(i)).getValor();
                 //se hace POP del tipo
                 PILA.remove(i);
                 break;
