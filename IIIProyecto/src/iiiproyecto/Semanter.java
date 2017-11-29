@@ -443,7 +443,7 @@ public class Semanter {
             if (obj instanceof RS_Variable){
                 RS_Variable variable = (RS_Variable)obj;
                 System.out.println("Identificador de varaible: ");
-                System.out.println(variable.getTipo() + " - " + variable.getNombre() + " - " + variable.getValor() + " - " + variable.getAmbito());
+                System.out.println(variable.getTipo() + " - " + variable.getNombre() + " - " + variable.getAmbito());
             }
             else if (obj instanceof RS_Funcion){
                 RS_Funcion variable = (RS_Funcion)obj;
