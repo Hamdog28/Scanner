@@ -45,6 +45,7 @@ public class Semanter {
                         if(PILA.get(j) instanceof RS_Funcion ){
                             
                             RS_Funcion fun = (RS_Funcion)PILA.get(j);
+                            System.out.println(fun.getNombre());
                             //se verifica que la variable sea de esa funcion o sea global
                             if(fun.getNombre().equals(aux.getAmbito())|| aux.getAmbito().equals("global")){
                                 return true;
@@ -66,6 +67,8 @@ public class Semanter {
             if(TS.get(i) instanceof RS_Funcion){
                 RS_Funcion aux =(RS_Funcion)TS.get(i);
                 //se evalua se se llaman igual
+                System.out.println("holaa");
+                System.out.println(i);
                 if (aux.getNombre().equals(token)){
                     return true;
                 }
@@ -119,9 +122,12 @@ public class Semanter {
     
     //se ejecuta antes de llegar al "("  
     public void guardar_funcion(String token, boolean declaracion){
+        print("guardar_funcion: " + token);
         RS_DO funcion = new RS_DO();
         funcion.setTipo("funcion");
         funcion.setValor(token);
+        System.out.println("estoo");
+        System.out.println(token);
         //se verifica que la funcion llamada exista
         if(!buscar_Fun_TS(token) && !declaracion)
             System.out.println("Error, funcion no definida");

@@ -1,8 +1,8 @@
-int main(){
+void main(){
 	int c, c, a;
 	return 0;
 }
 
-int lol(){
+void lol(){
 	int c;
 }
