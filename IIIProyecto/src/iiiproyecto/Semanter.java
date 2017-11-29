@@ -136,6 +136,7 @@ public class Semanter {
     
     //se ejecuta despues del ")" del llamado de una funcion
     public void evaluar_funcion(){
+        print("evaluar_funcion");
     //evalua si el llamado de la funcion es correcto
         String funcion_nombre ="";
         ArrayList <RS_DO> params = new ArrayList();
@@ -152,38 +153,39 @@ public class Semanter {
                 PILA.remove(i);
             }
         }
-        for (int i =0; i<TS.size();i++){
-            if(TS.get(i) instanceof RS_Funcion && ((RS_Funcion)TS.get(i)).getNombre().equals(funcion_nombre)){
-                funcion=(RS_Funcion)TS.get(i);
-                break;
-            }
-        }
-        if(funcion.getParametros().size()!=params.size())
-            System.out.println("Error, numero incorrecto de parametros");
-        else
-            for(int i = 0;i<params.size();i++){
-                if(params.get(i).getTipo().equals("literal")){
-                    if(isChar(params.get(i).getValor())){
-                       if (!funcion.getParametros().get(i).getTipo().equals("char"))
-                           System.out.println("Error, parametro"+ (params.size()-i) +"de tipo incorrecto");
-                   }
-                   else if(isInteger(params.get(i).getValor()) ){
-                       if (!funcion.getParametros().get(i).getTipo().equals("int"))
-                           System.out.println("Error, parametro"+ (params.size()-i) +"de tipo incorrecto");
-                   }
+        if(buscar_Fun_TS(funcion_nombre)){
+            for (int i =0; i<TS.size();i++){
+                if(TS.get(i) instanceof RS_Funcion && ((RS_Funcion)TS.get(i)).getNombre().equals(funcion_nombre)){
+                    funcion=(RS_Funcion)TS.get(i);
+                    break;
                 }
-                else{//variable
-                    if(buscar_Var_TS(params.get(i).getValor())){
-                        for(int j = 0; j<TS.size();j++){
-                            if(TS.get(j) instanceof RS_Variable && ((RS_Variable)TS.get(j)).getNombre().equals(params.get(i).getValor())){
-                                if(!((RS_Variable)TS.get(j)).getTipo().equals(funcion.getParametros().get(i).getTipo())){
-                                    System.out.println("Error, parametro"+ (params.size()-i) +"de tipo incorrecto");
+            }
+            if(funcion.getParametros().size()!=params.size())
+                System.out.println("Error, numero incorrecto de parametros");
+            else
+                for(int i = 0;i<params.size();i++){
+                    if(params.get(i).getTipo().equals("literal")){
+                        if(isChar(params.get(i).getValor())){
+                           if (!funcion.getParametros().get(i).getTipo().equals("char"))
+                               System.out.println("Error, parametro"+ (params.size()-i) +"de tipo incorrecto");
+                       }
+                       else if(isInteger(params.get(i).getValor()) ){
+                           if (!funcion.getParametros().get(i).getTipo().equals("int"))
+                               System.out.println("Error, parametro"+ (params.size()-i) +"de tipo incorrecto");
+                       }
+                    }
+                    else{//variable
+                        if(buscar_Var_TS(params.get(i).getValor())){
+                            for(int j = 0; j<TS.size();j++){
+                                if(TS.get(j) instanceof RS_Variable && ((RS_Variable)TS.get(j)).getNombre().equals(params.get(i).getValor())){
+                                    if(!((RS_Variable)TS.get(j)).getTipo().equals(funcion.getParametros().get(i).getTipo())){
+                                        System.out.println("Error, parametro"+ (params.size()-i) +"de tipo incorrecto");
+                                    }
                                 }
                             }
                         }
                     }
-                }
-                    }
+                        }}
 
     }
     
@@ -257,8 +259,8 @@ public class Semanter {
                 RS_Parametro param;
                 param = (RS_Parametro)PILA.get(i);
                 //se verifica que los parametros se llamen diferente
-                for(int j = 0; parametros.get(i)!=null;i++){
-                    if(parametros.get(i).getNombre().equals(param.getNombre())){
+                for(int j = 0; j<parametros.size();j++){
+                    if(parametros.get(j).getNombre().equals(param.getNombre())){
                         System.out.println("Error, parametro previamente definido");
                         break;
                     }
@@ -357,6 +359,7 @@ public class Semanter {
     }
     //se llama luego del ";" del break
     public void guardar_break(String token){
+        print("guardar_break");
         RS_DO Break = new RS_DO();
         Break.setTipo("break");
         Break.setValor(token);
@@ -366,6 +369,7 @@ public class Semanter {
             }
             else if(PILA.get(i) instanceof RS_Funcion || i==0){
                 System.out.println("Error, el break debe de ir dentro de un while");
+                break;
             }
         }
         PILA.add(Break);
@@ -382,6 +386,7 @@ public class Semanter {
             }
             else if(PILA.get(i) instanceof RS_Funcion || i==0){
                 System.out.println("Error, el continue debe de ir dentro de un while");
+                break;
             }
         }
         PILA.add(Continue);

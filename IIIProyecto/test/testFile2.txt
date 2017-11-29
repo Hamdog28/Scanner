@@ -1,8 +1,10 @@
-void main(){
+void main(char x){
 	int c, c, a;
 	return 0;
 }
 
 void lol(){
 	int c;
+	main(2);
+break;
 }
