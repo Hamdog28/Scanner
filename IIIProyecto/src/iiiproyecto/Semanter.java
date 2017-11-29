@@ -273,7 +273,7 @@ public class Semanter {
             
             //se saca el tipo de la funcion de la pila
             else if(PILA.get(i) instanceof RS_DO){
-                RS_DO Tipo = new RS_DO();
+                RS_DO Tipo = (RS_DO)PILA.get(i);
                 tipo=Tipo.getValor();
                 PILA.remove(i);  
                 break;
