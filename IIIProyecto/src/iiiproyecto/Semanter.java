@@ -175,7 +175,7 @@ public class Semanter {
                 else{//variable
                     if(buscar_Var_TS(params.get(i).getValor())){
                         for(int j = 0; j<TS.size();j++){
-                            if(TS.get(j) instanceof RS_Variable && ((RS_Variable)TS.get(j)).){
+                            if(TS.get(j) instanceof RS_Variable && ((RS_Variable)TS.get(j)).getNombre().equals(params.get(i).getValor())){
                                 
                             }
                         }
