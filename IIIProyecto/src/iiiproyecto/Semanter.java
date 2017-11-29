@@ -45,15 +45,16 @@ public class Semanter {
                         if(PILA.get(j) instanceof RS_Funcion ){
                             
                             RS_Funcion fun = (RS_Funcion)PILA.get(j);
-                            System.out.println(fun.getNombre());
+                            
                             //se verifica que la variable sea de esa funcion o sea global
                             if(fun.getNombre().equals(aux.getAmbito())|| aux.getAmbito().equals("global")){
                                 return true;
                             }
                             break;
                         }
-                        else if(aux.getAmbito().equals("global"))
+                        else if(aux.getAmbito().equals("global")){
                             return true;
+                        }
                     }
                 }
             }
@@ -86,6 +87,7 @@ public class Semanter {
         id.setTipo("direccion");
         id.setValor(token);
         //si no es una declaracion entra si no se ha definido la variable
+        
         if(!declaracion && !buscar_Var_TS(id.getValor()))
             System.out.println("error, variable no definida"); // mensaje de error provisional
        
@@ -273,7 +275,7 @@ public class Semanter {
         String ambito = "global";
         String tipo="";
         
-        for(int i=PILA.size()-1;i<=0;i--){
+        for(int i=PILA.size()-1;i>=0;i--){
             //se verifica si se esta dentro de una funcion
             if(PILA.get(i) instanceof RS_Funcion){
                 //se cambia el ambito por el nombre de la funcion
@@ -283,7 +285,7 @@ public class Semanter {
         }
         
         //se recorre la pila para buscar el tipo
-        for(int i=PILA.size()-1;i<=0;i--){
+        for(int i=PILA.size()-1;i>=0;i--){
             //se busca el tipo int/char/float
             if(PILA.get(i) instanceof RS_DO && ((RS_DO)PILA.get(i)).getTipo().equals("tipo")){
                 //se guarda el tipo de la declaracion
