@@ -108,22 +108,4 @@ public class IIIProyecto {
             Logger.getLogger(IIIProyecto.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
-    
-    public void print() {
-        ArrayList<Object> TS = new ArrayList();
-        
-        for (Object obj: TS) {
-            if (obj instanceof RS_Variable){
-                RS_Variable variable = (RS_Variable)obj;
-                System.out.println("Identificador de varaible: ");
-                System.out.println(variable.getTipo() + " - " + variable.getNombre() + " - " + variable.getValor() + " - " + variable.getAmbito());
-            }
-            else if (obj instanceof RS_Funcion){
-                RS_Funcion variable = (RS_Funcion)obj;
-                System.out.println("Identificador de varaible: ");
-                System.out.println(variable.getTipo() + " - " + variable.getNombre());
-            }
-            System.out.println("");
-        }
-    }
 }

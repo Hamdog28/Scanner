@@ -427,5 +427,21 @@ public class Semanter {
         if (String.valueOf(cadena.charAt(0)).equals("'") )
                 return true;    
         return false;
-    }    
+    }
+    
+    public void printTablaSimbolos() {        
+        for (Object obj: TS) {
+            if (obj instanceof RS_Variable){
+                RS_Variable variable = (RS_Variable)obj;
+                System.out.println("Identificador de varaible: ");
+                System.out.println(variable.getTipo() + " - " + variable.getNombre() + " - " + variable.getValor() + " - " + variable.getAmbito());
+            }
+            else if (obj instanceof RS_Funcion){
+                RS_Funcion variable = (RS_Funcion)obj;
+                System.out.println("Identificador de varaible: ");
+                System.out.println(variable.getTipo() + " - " + variable.getNombre());
+            }
+            System.out.println("");
+        }
+    }
 }
