@@ -322,10 +322,10 @@ EXPASIARR ::= ARRAYLIST
             | error {: print("Error en la asignacion"); :};
 
 // Literales
-LITERAL   ::= smbcharlit:e {: print(e); :}
-            | smbdec:e {: print(e); :}
-            | smbhex:e {: print(e); :}
-            | smboct:e {: print(e); :};
+LITERAL   ::= smbcharlit:e {: sm.guardar_literal(e); print(e); :}
+            | smbdec:e {: sm.guardar_literal(e); print(e); :}
+            | smbhex:e {: sm.guardar_literal(e); print(e); :}
+            | smboct:e {: sm.guardar_literal(e); print(e); :};
 
 // Arreglos para asignar
 ARRAYLIST ::= smbllaveabrir:e {: print(e); :} LITERAL ARRAYLIST2 smbllavecerrar:c {: print(c); :};
@@ -336,26 +336,26 @@ ARRAYLIST2::= smbcoma:e {: print(e); :} LITERAL ARRAYLIST2
 STRING    ::= smbstring:e {: print(e); :};
 
 // Operaciones
-EXP       ::= smbparentabrir:e {: print(e); :} EXP smbparentcerrar:c {: print(c); :}
-            | EXP smbigualigual:e {: print(e); :} EXP
-            | EXP smbmayorigual:e {: print(e); :} EXP
-            | EXP smbmayor:e {: print(e); :} EXP
-            | EXP smbmenorigual:e {: print(e); :} EXP
-            | EXP smbmenor:e {: print(e); :} EXP
-            | EXP smbdiferente:e {: print(e); :} EXP
-            | EXP smbor:e {: print(e); :} EXP
-            | EXP smband:e {: print(e); :} EXP
-            | EXP smbmas:e {: print(e); :} EXP
-            | EXP smbmenos:e {: print(e); :} EXP
-            | smbmenos:e {: print(e); :} EXP
-            | EXP smbmultiplicacion:e {: print(e); :} EXP
-            | EXP smbdivision:e {: print(e); :} EXP
-            | EXP smbdivisionentera:e {: print(e); :} EXP
-            | smbadmiracion:e {: print(e); :} EXP
-            | EXP smbmasmas:e {: print(e); :}
-            | smbmasmas:e {: print(e); :} EXP
-            | EXP smbmenosmenos:e {: print(e); :}
-            | smbmenosmenos:e {: print(e); :} EXP
+EXP       ::= smbparentabrir:e {: sm.guardar_operador(e); print(e); :} EXP smbparentcerrar:c {: sm.guardar_operador(c); print(c); :}
+            | EXP smbigualigual:e {: sm.guardar_operador(e); print(e); :} EXP
+            | EXP smbmayorigual:e {: sm.guardar_operador(e); print(e); :} EXP
+            | EXP smbmayor:e {: sm.guardar_operador(e); print(e); :} EXP
+            | EXP smbmenorigual:e {: sm.guardar_operador(e); print(e); :} EXP
+            | EXP smbmenor:e {: sm.guardar_operador(e); print(e); :} EXP
+            | EXP smbdiferente:e {: sm.guardar_operador(e); print(e); :} EXP
+            | EXP smbor:e {: sm.guardar_operador(e); print(e); :} EXP
+            | EXP smband:e {: sm.guardar_operador(e); print(e); :} EXP
+            | EXP smbmas:e {: sm.guardar_operador(e); print(e); :} EXP
+            | EXP smbmenos:e {: sm.guardar_operador(e); print(e); :} EXP
+            | smbmenos:e {: sm.guardar_operador(e); print(e); :} EXP
+            | EXP smbmultiplicacion:e {: sm.guardar_operador(e); print(e); :} EXP
+            | EXP smbdivision:e {: sm.guardar_operador(e); print(e); :} EXP
+            | EXP smbdivisionentera:e {: sm.guardar_operador(e); print(e); :} EXP
+            | smbadmiracion:e {: sm.guardar_operador(e); print(e); :} EXP
+            | EXP smbmasmas:e {: sm.guardar_operador(e); print(e); :}
+            | smbmasmas:e {: sm.guardar_operador(e); print(e); :} EXP
+            | EXP smbmenosmenos:e {: sm.guardar_operador(e); print(e); :}
+            | smbmenosmenos:e {: sm.guardar_operador(e); print(e); :} EXP
             | VAR
             | LAMFUNC
             | LITERAL;

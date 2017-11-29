@@ -111,7 +111,7 @@ public class Semanter {
     }
     
     //se ejecuta cuando se lee un operador
-    public void guardar_operador(String token){
+        public void guardar_operador(String token){
         RS_Operador operador = new RS_Operador();
         operador.setValor(token);
         PILA.add(operador);
