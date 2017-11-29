@@ -134,11 +134,57 @@ public class Semanter {
         PILA.add(funcion);
     }
     
-    //se ejecuta despues del ";" del llamado de una funcion
+    //se ejecuta despues del ")" del llamado de una funcion
     public void evaluar_funcion(){
     //evalua si el llamado de la funcion es correcto
-    
+        String funcion_nombre ="";
+        ArrayList <RS_DO> params = new ArrayList();
+        RS_Funcion funcion = new RS_Funcion();
+        
+        for(int i = PILA.size()-1;i>=0;i--){
+            if(PILA.get(i) instanceof RS_DO && ((RS_DO)PILA.get(i)).getTipo().equals("funcion")){
+                funcion_nombre=((RS_DO)PILA.get(i)).getValor();
+                PILA.remove(i);
+                break;
+            }
+            else if(PILA.get(i) instanceof RS_DO){
+                params.add((RS_DO)PILA.get(i));
+                PILA.remove(i);
+            }
+        }
+        for (int i =0; i<TS.size();i++){
+            if(TS.get(i) instanceof RS_Funcion && ((RS_Funcion)TS.get(i)).getNombre().equals(funcion_nombre)){
+                funcion=(RS_Funcion)TS.get(i);
+                break;
+            }
+        }
+        if(funcion.getParametros().size()!=params.size())
+            System.out.println("Error, numero incorrecto de parametros");
+        else
+            for(int i = 0;i<params.size();i++){
+                if(params.get(i).getTipo().equals("literal")){
+                    if(isChar(params.get(i).getValor())){
+                       if (!funcion.getParametros().get(i).getTipo().equals("char"))
+                           System.out.println("Error, parametro"+ (params.size()-i) +"de tipo incorrecto");
+                   }
+                   else if(isInteger(params.get(i).getValor()) ){
+                       if (!funcion.getParametros().get(i).getTipo().equals("int"))
+                           System.out.println("Error, parametro"+ (params.size()-i) +"de tipo incorrecto");
+                   }
+                }
+                else{//variable
+                    if(buscar_Var_TS(params.get(i).getValor())){
+                        for(int j = 0; j<TS.size();j++){
+                            if(TS.get(j) instanceof RS_Variable && ((RS_Variable)TS.get(j)).){
+                                
+                            }
+                        }
+                    }
+                }
+                    }
+
     }
+    
     
     /*
     Falta:
@@ -169,31 +215,16 @@ public class Semanter {
     //se ejecuta antes de la "," o el ")" cuando se llama a una funcion
     public void guardar_parametros_literal(String token){ //**ME FALTA VERIFICAR EL TIPO DE LOS PARAMETROS
         RS_DO param = new RS_DO(); //variable que se va a guardar en la pila
-        String funcion ="";
-        String tipo ="";
-        
-        //busca el nombre de la funcion en la pila
-        for(int i = PILA.size()-1; i>=0; i--){
-            if(PILA.get(i)instanceof RS_DO && ((RS_DO)PILA.get(i)).getTipo().equals("funcion")){
-                funcion = ((RS_DO)PILA.get(i)).getValor();
-                break;
-            }
+
+        if(isChar(token)){
+            param.setTipo("char");
         }
-        //
-        if(buscar_Fun_TS(funcion)){
-            if(isChar(token)){
-                tipo = "char";
-            }
-            else if(isInteger(token) && buscar_Fun_TS(funcion)){
-                tipo = "int";
-            }
-            else{
-                tipo = "direccion";
-            }
+        else if(isInteger(token) ){
+            param.setTipo("int");
         }
-        
-        //param.setTipo("literal");
-        //param.setNombre(token);
+        else{//variable
+            param.setTipo("direccion");
+        }
         
       
         PILA.add(param);
@@ -393,14 +424,8 @@ public class Semanter {
     }
     
     public boolean isChar(String cadena){
-        
-	if (cadena.length()==1)
-		return true;
-        else if (cadena.length()==2){
-            if (String.valueOf(cadena.charAt(0)).equals("\\") )
-                if(String.valueOf(cadena.charAt(0)).matches("b|t|n|f|r"))
-                    return true;
-        }     
+        if (String.valueOf(cadena.charAt(0)).equals("'") )
+                return true;    
         return false;
     }    
 }
