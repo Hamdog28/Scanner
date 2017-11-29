@@ -67,8 +67,6 @@ public class Semanter {
             if(TS.get(i) instanceof RS_Funcion){
                 RS_Funcion aux =(RS_Funcion)TS.get(i);
                 //se evalua se se llaman igual
-                System.out.println("holaa");
-                System.out.println(i);
                 if (aux.getNombre().equals(token)){
                     return true;
                 }
@@ -126,8 +124,7 @@ public class Semanter {
         RS_DO funcion = new RS_DO();
         funcion.setTipo("funcion");
         funcion.setValor(token);
-        System.out.println("estoo");
-        System.out.println(token);
+       
         //se verifica que la funcion llamada exista
         if(!buscar_Fun_TS(token) && !declaracion)
             System.out.println("Error, funcion no definida");
@@ -211,7 +208,7 @@ public class Semanter {
         for(int i = PILA.size()-1; i>=0; i--){
              //se saca el nombre de la funcion de la pila
             if(PILA.get(i) instanceof RS_DO && ((RS_DO)PILA.get(i)).getTipo().equals("funcion")){
-                RS_DO Funcion = new RS_DO();
+                RS_DO Funcion = (RS_DO)PILA.get(i);
                 nombre=Funcion.getValor();
                 PILA.remove(i);
                 break;
@@ -254,6 +251,7 @@ public class Semanter {
         funcion.setNombre(nombre);
         funcion.setParametros(parametros);
         funcion.setTipo(tipo);
+         
         //verifica que la funcion a declarar no exista
         if(buscar_Fun_TS(nombre))
             System.out.println("Error, funcion definida anteriormente");
@@ -264,6 +262,7 @@ public class Semanter {
     }
     //se ejecuta cuando se llega a "}"
     public void fin_funcion(){
+        print("fin_funcion");
         PILA.remove(PILA.size()-1);
     }
     
