@@ -237,16 +237,16 @@ INSTLIST  ::= INSTRUC INSTLIST
             | ;
 
 INSTRUC   ::= ASIGOEXP PUCOMA
-            | CONTINUE PUCOMA
-            | BREAK PUCOMA
+            | CONTINUE PUCOMA {: sm.guardar_continue("Bonjour contiene"); :}
+            | BREAK PUCOMA {: sm.guardar_break("Bonjour break"); :}
             | RETURN PUCOMA
             | READ PUCOMA
             | WRITE PUCOMA
             | FOR
-            | WHILE
+            | WHILE {: sm.finWhile(); :}
             | DOWHILE PUCOMA
             | SWITCH
-            | IF
+            | IF {: sm.finIF(); :}
             | error {: print("Error en la instruccion"); :} PUCOMA;
 
 // Instruccinoes simples
@@ -276,9 +276,9 @@ BREAK     ::= smbbreak:e {: print(e); :};
 CONTINUE  ::= smbcontinue:e {: print(e); :};
 
 // Bloque If
-IF        ::= smbif:e {: print(e); :} smbparentabrir:c {: print(c); :} ASIGOEXP smbparentcerrar:o {: print(o); :} GENBLOCK IFELSE;
+IF        ::= smbif:e {: sm.inicioIF(); print(e); :} smbparentabrir:c {: print(c); :} ASIGOEXP smbparentcerrar:o {: sm.evaluarIF(); print(o); :} GENBLOCK IFELSE;
 
-IFELSE    ::= smbelse:e {: print(e); :} GENBLOCK
+IFELSE    ::= smbelse:e {: sm.inicioElse(); print(e); :} GENBLOCK
             | ;
 
 // Bloque Switch
@@ -293,9 +293,9 @@ SWTHCS    ::= smbcase:e {: print(e); :} LITERAL smbdospuntos:c {: print(c); :} I
 DOWHILE   ::= smbdo:e {: print(e); :} GENBLOCK smbwhile:c {: print(c); :} WHLPARAM;
 
 // Ciclo while
-WHILE     ::= smbwhile:e {: print(e); :} WHLPARAM GENBLOCK;
+WHILE     ::= smbwhile:e {: sm.inicioWhile(); print(e); :} WHLPARAM GENBLOCK;
 
-WHLPARAM  ::= smbparentabrir:e {: print(e); :} ASIGOEXP smbparentcerrar:c {: print(c); :};
+WHLPARAM  ::= smbparentabrir:e {: print(e); :} ASIGOEXP smbparentcerrar:c {: sm.evaluarWhile(); print(c); :};
 
 // Ciclo for
 FOR       ::= smbfor:e {: print(e); :} FORPARAM GENBLOCK;

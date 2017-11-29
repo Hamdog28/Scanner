@@ -959,7 +959,7 @@ class Lexer implements java_cup.runtime.Scanner {
             }
           case 122: break;
           case 48: 
-            { yybegin(YYINITIAL); return simbolo("CHAR: " + yytext().charAt(0), Simbolos.smbcharlit, String.valueOf(yytext().charAt(0)));
+            { yybegin(YYINITIAL); return simbolo("CHAR: " + yytext().charAt(0), Simbolos.smbcharlit, "'" + String.valueOf(yytext().charAt(0)));
             }
           case 123: break;
           case 49: 
