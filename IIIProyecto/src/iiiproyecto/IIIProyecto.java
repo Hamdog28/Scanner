@@ -1,5 +1,7 @@
 package iiiproyecto;
 
+import iiiproyecto.Registros_Semanticos.RS_Funcion;
+import iiiproyecto.Registros_Semanticos.RS_Variable;
 import java.io.BufferedReader;
 import static java.nio.file.StandardCopyOption.REPLACE_EXISTING;
 import java.io.FileNotFoundException;
@@ -10,6 +12,7 @@ import java.util.logging.Level;
 import java.util.Scanner;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.util.ArrayList;
 import jflex.SilentExit;
 
 /**
@@ -103,6 +106,24 @@ public class IIIProyecto {
         } catch (Exception ex) {
             System.out.println(ex.toString());
             Logger.getLogger(IIIProyecto.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+    
+    public void print() {
+        ArrayList<Object> TS = new ArrayList();
+        
+        for (Object obj: TS) {
+            if (obj instanceof RS_Variable){
+                RS_Variable variable = (RS_Variable)obj;
+                System.out.println("Identificador de varaible: ");
+                System.out.println(variable.getTipo() + " - " + variable.getNombre() + " - " + variable.getValor() + " - " + variable.getAmbito());
+            }
+            else if (obj instanceof RS_Funcion){
+                RS_Funcion variable = (RS_Funcion)obj;
+                System.out.println("Identificador de varaible: ");
+                System.out.println(variable.getTipo() + " - " + variable.getNombre());
+            }
+            System.out.println("");
         }
     }
 }

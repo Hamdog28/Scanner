@@ -26,7 +26,6 @@ parser code
         System.out.println("¡No se pudo recuperar!");
         System.out.println("Terror sintáctico en la fila " + fila + ", columna " + columna + ": Token inesperado <" + lexema + ">");
     }
-    public void guardar_id(){}
 :}
 
 action code
