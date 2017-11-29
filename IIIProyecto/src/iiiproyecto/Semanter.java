@@ -25,7 +25,7 @@ public class Semanter {
     }
     
     private void print(String msg){
-        System.out.println("Semantic: " + msg);
+        //System.out.println("Semantic: " + msg);
     }
     
     //busca si existe la variable en la tabla de simbolos
@@ -475,7 +475,7 @@ public class Semanter {
             else if (obj instanceof RS_Funcion){
                 RS_Funcion variable = (RS_Funcion)obj;
                 System.out.println("Identificador de funcion: ");
-                System.out.println(variable.getTipo() + " - " + variable.getNombre());
+                System.out.println(variable.getTipo() + " - " + variable.getNombre() + " - " + variable.getParametros().size());
             }
             System.out.println("");
         }

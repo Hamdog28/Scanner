@@ -90,7 +90,7 @@ public class IIIProyecto {
     
     public static void analizarArchivo() {
         
-        String filePath = "test\\NO\\Errores.c";
+        String filePath = "test\\Revision\\TablaSimbolos.txt";
                         
         try {
             Lexer lexer = new Lexer(new BufferedReader(new FileReader(filePath)));
