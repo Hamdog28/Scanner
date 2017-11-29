@@ -171,14 +171,14 @@ LAMFUNCP2 ::= smbcoma:e {: print(e); :} EXP LAMFUNCP2
 VAROFUNC  ::= smbconst:e {: print(e); :} VAROFUNC1
             | VAROFUNC1;
 
-VAROFUNC1 ::= smbchar:e {: print(e); :} IDENTIF VAROFUNC2
-            | smbint:e {: print(e); :} IDENTIF VAROFUNC2
-            | smblong:e {: print(e); :} IDENTIF VAROFUNC2
-            | smbshort:e {: print(e); :} IDENTIF VAROFUNC2
-            | smbvoid:e {: print(e); :} IDENTIF FUNCPARAM FUNCBLOCK FUNCDEFIN
+VAROFUNC1 ::= smbchar:e {: sm.guardar_tipo(e); print(e); :} IDENTIF:i {: sm.guardar_id(i, true); :} VAROFUNC2
+            | smbint:e {: sm.guardar_tipo(e); print(e); :} IDENTIF:i {: sm.guardar_id(i, true); :} VAROFUNC2
+            | smblong:e {: sm.guardar_tipo(e); print(e); :} IDENTIF:i {: sm.guardar_id(i, true); :} VAROFUNC2
+            | smbshort:e {: sm.guardar_tipo(e); print(e); :} IDENTIF:i {: sm.guardar_id(i, true); :} VAROFUNC2
+            | smbvoid:e {: sm.guardar_tipo(e); print(e); :} IDENTIF:i {: sm.guardar_funcion(i, true); :} FUNCPARAM FUNCBLOCK FUNCDEFIN
             | error {: print("Error en la declaración"); :} VAROFUNC;
 
-VAROFUNC2 ::= VARARRAY VARDECL2 PUCOMA VAROFUNC
+VAROFUNC2 ::= VARARRAY VARDECL2 PUCOMA {: sm.declarar_variables(); :} VAROFUNC
             | FUNCPARAM FUNCBLOCK FUNCDEFIN;
 
 // Reglas de variables
@@ -202,21 +202,21 @@ VARASIG   ::= smbigual:e {: print(e); :} EXPASIARR
             | ;
 
 // Definicion de funciones
-FUNCDEFIN ::= FUNCTIPO IDENTIF FUNCPARAM FUNCBLOCK FUNCDEFIN
+FUNCDEFIN ::= FUNCTIPO:v {: sm.guardar_tipo(v); :} IDENTIF:i {: sm.guardar_id(i, true); :} FUNCPARAM FUNCBLOCK FUNCDEFIN
             | ;
 
 // Tipos de funcion
-FUNCTIPO  ::= smbconst:e {: print(e); :} FUNCTIPO1
-            | FUNCTIPO1;
+FUNCTIPO  ::= smbconst:e {: print(e); :} FUNCTIPO1:v {: RESULT = v; :}
+            | FUNCTIPO1:v {: RESULT = v; :};
 
-FUNCTIPO1 ::= smbchar:e {: print(e); :}
-            | smbint:e {: print(e); :}
-            | smblong:e {: print(e); :}
-            | smbshort:e {: print(e); :}
-            | smbvoid:e {: print(e); :};
+FUNCTIPO1 ::= smbchar:e {: RESULT = e; print(e); :}
+            | smbint:e {: RESULT = e; print(e); :}
+            | smblong:e {: RESULT = e; print(e); :}
+            | smbshort:e {: RESULT = e; print(e); :}
+            | smbvoid:e {: RESULT = e; print(e); :};
 
 // Parametros de funcion
-FUNCPARAM ::= smbparentabrir:e {: print(e); :} FUNPARAM smbparentcerrar:c {: print(c); :};
+FUNCPARAM ::= smbparentabrir:e {: print(e); :} FUNPARAM smbparentcerrar:c {: sm.declarar_funcion(); print(c); :};
 
 FUNPARAM  ::= FUNPARDEC FUNPARAM1
             | ;
@@ -224,7 +224,7 @@ FUNPARAM  ::= FUNPARDEC FUNPARAM1
 FUNPARAM1 ::= smbcoma:e {: print(e); :} FUNPARDEC FUNPARAM1
             | ;
 
-FUNPARDEC ::= VARTIPO IDENTIF;
+FUNPARDEC ::= VARTIPO:v {: sm.guardar_tipo(v); :} IDENTIF:i {: sm.guardar_parametros_id(i); :};
 
 // Bloque de funcion
 FUNCBLOCK ::= smbllaveabrir:e {: print(e); :} FUNVARDEC INSTLIST smbllavecerrar:c {: print(c); :};
