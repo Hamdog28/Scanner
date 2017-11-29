@@ -44,9 +44,9 @@ public class Semanter {
                         //Se verifica que sea de tipo RS_Funcion 
                         if(PILA.get(j) instanceof RS_Funcion ){
                             
-                            RS_Funcion aux2 = (RS_Funcion)PILA.get(j);
+                            RS_Funcion fun = (RS_Funcion)PILA.get(j);
                             //se verifica que la variable sea de esa funcion o sea global
-                            if(aux2.getNombre().equals(aux.getAmbito())|| aux.getAmbito().equals("global")){
+                            if(fun.getNombre().equals(aux.getAmbito())|| aux.getAmbito().equals("global")){
                                 return true;
                             }
                             break;
@@ -137,13 +137,11 @@ public class Semanter {
     
     /*
     Falta:
-    -tipo de retorno **no se si hay q verificarlo**
     -tipo de parametos -> a medias
     -llamado de una funcion
     -while
     -if
-    -break
-    -continue
+    -imprimir TS
     -toda la traduccion
     */
     
@@ -163,16 +161,34 @@ public class Semanter {
         PILA.add(param);
     }
     
+    //se ejecuta antes de la "," o el ")" cuando se llama a una funcion
     public void guardar_parametros_literal(String token){ //**ME FALTA VERIFICAR EL TIPO DE LOS PARAMETROS
-        //agarra el ultimo elemento de la lista -> el tipo del parametro
-        String tipo=((RS_DO)PILA.get(PILA.size()-1)).getValor();
-        RS_Parametro param = new RS_Parametro(); //variable que se va a guardar en la pila
+        RS_DO param = new RS_DO(); //variable que se va a guardar en la pila
+        String funcion ="";
+        String tipo ="";
         
-        //se hace POP del tipo del parametro
-        PILA.remove(PILA.size()-1);
+        //busca el nombre de la funcion en la pila
+        for(int i = PILA.size()-1; i>=0; i--){
+            if(PILA.get(i)instanceof RS_DO && ((RS_DO)PILA.get(i)).getTipo().equals("funcion")){
+                funcion = ((RS_DO)PILA.get(i)).getValor();
+                break;
+            }
+        }
+        //
+        if(buscar_Fun_TS(funcion)){
+            if(isChar(token)){
+                tipo = "char";
+            }
+            else if(isInteger(token) && buscar_Fun_TS(funcion)){
+                tipo = "int";
+            }
+            else{
+                tipo = "direccion";
+            }
+        }
         
-        param.setTipo("literal");
-        param.setNombre(token);
+        //param.setTipo("literal");
+        //param.setNombre(token);
         
       
         PILA.add(param);
@@ -240,6 +256,10 @@ public class Semanter {
         PILA.add(funcion);
         
     }
+    //se ejecuta cuando se llega a "}"
+    public void fin_funcion(){
+        PILA.remove(PILA.size()-1);
+    }
     
     //se ejecuta cuanto se llega al ";" de una declaracion
     public void declarar_variables(){
@@ -286,7 +306,7 @@ public class Semanter {
                     TS.add(var);
                 }
                 else{
-                    System.out.println("Error, variable "+((RS_DO)PILA.get(i)).getValor()+ " definida");
+                    System.out.println("Error, variable "+((RS_DO)PILA.get(i)).getValor()+ " definida anteriormente");
                 }
                 //se hace POP de la variable
                 PILA.remove(i);
@@ -296,34 +316,67 @@ public class Semanter {
         
     }
     //se llama luego del ";" del break
-    private void guardar_break(){}
+    public void guardar_break(String token){
+        RS_DO Break = new RS_DO();
+        Break.setTipo("break");
+        Break.setValor(token);
+        for(int i = PILA.size()-1;i>=0;i--){
+            if(PILA.get(i) instanceof RS_While){
+                break;
+            }
+            else if(PILA.get(i) instanceof RS_Funcion || i==0){
+                System.out.println("Error, el break debe de ir dentro de un while");
+            }
+        }
+        PILA.add(Break);
+    }
+    
     //se llama luego del ";" del continue
-    private void guardar_continue(){}
+    public void guardar_continue(String token){
+        RS_DO Continue = new RS_DO();
+        Continue.setTipo("continue");
+        Continue.setValor(token);
+        for(int i = PILA.size()-1;i>=0;i--){
+            if(PILA.get(i) instanceof RS_While){
+                break;
+            }
+            else if(PILA.get(i) instanceof RS_Funcion || i==0){
+                System.out.println("Error, el continue debe de ir dentro de un while");
+            }
+        }
+        PILA.add(Continue);
+    }
     
     
     //se llama luego de leer el "if"
-    private void inicioIF(){
-    RS_IF sentencia_if = new RS_IF();
+    public void inicioIF(){
+        RS_IF If = new RS_IF();
+        PILA.add(If);
     }
     //se llama luego de leer el ")"
-    private void evaluarIF(){}
+    public void evaluarIF(){}
     //se llama luego de leer el "else"
-    private void inicioElse(){}
+    public void inicioElse(){}
     //se llama luego de leer el "}"
-    private void finIF(){}
+    public void finIF(){
+        PILA.remove(PILA.size()-1);
+    }
     
     
     //se llama luego de leer el "while"
-    private void inicioWhile(){
-    RS_While cilo_while = new RS_While();
+    public void inicioWhile(){
+        RS_While While = new RS_While();
+        PILA.add(While);
     }
     //se llama luego de leer el ")"
-    private void evaluarWhile(){}
+    public void evaluarWhile(){}
     //se llama luego de leer el "}"
-    private void finWhile(){}
+    public void finWhile(){
+        PILA.remove(PILA.size()-1);
+    }
     
     //METODOS PARA EVALUAR EL TIPO DE LOS PARAMETROS
-    private boolean isInteger(String cadena){
+    public boolean isInteger(String cadena){
 	try {
 		Integer.parseInt(cadena);
 		return true;
@@ -331,15 +384,8 @@ public class Semanter {
 		return false;
 	}
     }
-    private boolean isFloat(String cadena){
-	try {
-		Float.parseFloat(cadena);
-		return true;
-	} catch (NumberFormatException nfe){
-		return false;
-	}
-    }
-    private boolean isChar(String cadena){
+    
+    public boolean isChar(String cadena){
         
 	if (cadena.length()==1)
 		return true;
